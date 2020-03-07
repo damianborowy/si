@@ -1,18 +1,18 @@
 import React from "react";
 import Agglomeration from "../models/Agglomeration";
-import Population from "../models/Population";
+import styles from "./App.module.scss";
+import Sidebar from "./Sidebar";
+import Content from "./Content";
 
 interface IAppState {
     agglomerations: Agglomeration[];
     selectedAgglomeration: Agglomeration;
-    population: Population;
 }
 
 class App extends React.Component<{}, IAppState> {
     state: Readonly<IAppState> = {
         agglomerations: [],
-        selectedAgglomeration: null!,
-        population: null!
+        selectedAgglomeration: null!
     };
 
     async componentDidMount() {
@@ -29,13 +29,30 @@ class App extends React.Component<{}, IAppState> {
 
         this.setState({
             agglomerations,
-            selectedAgglomeration: agglomerations[0],
-            population: new Population(50, agglomerations[0])
+            selectedAgglomeration: agglomerations[0]
         });
     }
 
+    onSidebarButtonClick = (filename: string) => {
+        const agglomeration = this.state.agglomerations.find(
+            agglomeration => agglomeration.name === filename
+        );
+
+        if (!agglomeration) throw new Error("Incorrect agglomeration name");
+
+        this.setState({ selectedAgglomeration: agglomeration });
+    };
+
     render() {
-        return <p>aaaa</p>;
+        return (
+            <div className={styles.wrapper}>
+                <Sidebar
+                    filenamesList={files}
+                    onButtonClick={this.onSidebarButtonClick}
+                />
+                <Content agglomeration={this.state.selectedAgglomeration} />
+            </div>
+        );
     }
 }
 

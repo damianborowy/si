@@ -8,10 +8,9 @@ export default class Population {
         public specimens: Individual[] = []
     ) {
         if (!specimens) this.specimens = new Array<Individual>();
-        this.createNewGeneration();
     }
 
-    public createNewGeneration() {
+    public createNewRandomGeneration() {
         for (let i = 0; i < this.size; i++) {
             const specimen = new Individual(this.agglomeration.towns);
             specimen.shuffle();

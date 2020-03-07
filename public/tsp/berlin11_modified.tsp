@@ -1,4 +1,4 @@
-NAME: berlin52
+NAME: berlin11_modified
 TYPE: TSP
 COMMENT: 11 locations selected from berlin52
 DIMENSION: 11
