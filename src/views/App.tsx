@@ -32,11 +32,6 @@ class App extends React.Component<{}, IAppState> {
             agglomerations,
             selectedAgglomeration: agglomerations[0]
         });
-
-        const individual = new Individual(agglomerations[0].towns);
-        individual.makeGreedy(agglomerations[0].towns[9]);
-        console.log(individual.calculateTotalDistance());
-        console.log(individual.towns);
     }
 
     onSidebarButtonClick = (filename: string) => {

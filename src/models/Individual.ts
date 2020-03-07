@@ -52,6 +52,6 @@ export default class Individual {
             this.towns[this.towns.length - 1]
         );
 
-        return sum;
+        return Math.round((sum + Number.EPSILON) * 100) / 100;
     }
 }
