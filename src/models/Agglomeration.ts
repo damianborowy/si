@@ -1,7 +1,7 @@
 import Town from "./Town";
 
 export default class Agglomeration {
-    constructor(
+    private constructor(
         public name: string,
         public type: string,
         public comment: string,

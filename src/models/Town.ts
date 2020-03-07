@@ -1,5 +1,5 @@
 export default class Town {
-    constructor(
+    private constructor(
         public index: number,
         public x: number,
         public y: number,

@@ -3,6 +3,7 @@ import Agglomeration from "../models/Agglomeration";
 import styles from "./App.module.scss";
 import Sidebar from "./Sidebar";
 import Content from "./Content";
+import Individual from "../models/Individual";
 
 interface IAppState {
     agglomerations: Agglomeration[];
@@ -31,6 +32,11 @@ class App extends React.Component<{}, IAppState> {
             agglomerations,
             selectedAgglomeration: agglomerations[0]
         });
+
+        const individual = new Individual(agglomerations[0].towns);
+        individual.makeGreedy(agglomerations[0].towns[9]);
+        console.log(individual.calculateTotalDistance());
+        console.log(individual.towns);
     }
 
     onSidebarButtonClick = (filename: string) => {
