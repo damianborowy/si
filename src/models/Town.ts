@@ -3,32 +3,35 @@ export default class Town {
         public index: number,
         public x: number,
         public y: number,
-        public type: string
+        public edgeWeightType: string
     ) {}
 
-    public static fromTSPString(townLine: string, type: string): Town {
+    public static fromTSPString(
+        townLine: string,
+        edgeWeightType: string
+    ): Town {
         let line = townLine.split(/[ ]+/).filter(elem => /\S/.test(elem));
 
         return new Town(
             parseInt(line[0]),
             parseFloat(line[1]),
             parseFloat(line[2]),
-            type
+            edgeWeightType
         );
     }
 
     public calculateDistance(otherTown: Town): number {
-        if (this.type === "EUC_2D") return this.calculateEuc2D(otherTown);
-        else if (this.type === "GEO") return this.calculateGeo(otherTown);
+        if (this.edgeWeightType === "EUC_2D")
+            return this.calculateEuc2D(otherTown);
+        else if (this.edgeWeightType === "GEO")
+            return this.calculateGeo(otherTown);
         else throw new TypeError("Invalid agglomeration type");
     }
 
     private calculateEuc2D(otherTown: Town) {
-        const minX = Math.min(this.x, otherTown.x);
-        const maxX = Math.max(this.x, otherTown.x);
-        const minY = Math.min(this.y, otherTown.y);
-        const maxY = Math.min(this.y, otherTown.y);
-        return Math.sqrt((maxX - minX) ** 2 + (maxY - minY) ** 2);
+        return Math.sqrt(
+            (this.x - otherTown.x) ** 2 + (this.y - otherTown.y) ** 2
+        );
     }
 
     private calculateGeo(otherTown: Town) {

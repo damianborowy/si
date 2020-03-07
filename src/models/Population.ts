@@ -1,19 +1,19 @@
 import Agglomeration from "./Agglomeration";
-import Specimen from "./Specimen";
+import Individual from "./Individual";
 
 export default class Population {
     constructor(
         public size: number,
         public agglomeration: Agglomeration,
-        public specimens: Specimen[] = []
+        public specimens: Individual[] = []
     ) {
-        if (!specimens) this.specimens = new Array<Specimen>();
+        if (!specimens) this.specimens = new Array<Individual>();
         this.createNewGeneration();
     }
 
     public createNewGeneration() {
         for (let i = 0; i < this.size; i++) {
-            const specimen = new Specimen(this.agglomeration.towns);
+            const specimen = new Individual(this.agglomeration.towns);
             specimen.shuffle();
             this.specimens.push(specimen);
         }

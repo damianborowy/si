@@ -1,6 +1,6 @@
 import Town from "./Town";
 
-export default class Specimen {
+export default class Individual {
     public towns: Town[];
 
     constructor(towns: Town[]) {
@@ -13,6 +13,8 @@ export default class Specimen {
             [this.towns[i], this.towns[j]] = [this.towns[j], this.towns[i]];
         }
     }
+
+    public makeGreedy(startingTown: Town) {}
 
     public calculateTotalDistance() {
         let sum = 0;
