@@ -1,12 +1,19 @@
 import React from "react";
 import Agglomeration from "../models/Agglomeration";
+import Population from "../models/Population";
 
 interface IAppState {
     agglomerations: Agglomeration[];
+    selectedAgglomeration: Agglomeration;
+    population: Population;
 }
 
 class App extends React.Component<{}, IAppState> {
-    state: Readonly<IAppState> = { agglomerations: [] };
+    state: Readonly<IAppState> = {
+        agglomerations: [],
+        selectedAgglomeration: null!,
+        population: null!
+    };
 
     async componentDidMount() {
         const fetchedFiles = await Promise.all(
@@ -20,19 +27,23 @@ class App extends React.Component<{}, IAppState> {
             Agglomeration.fromTSP(fetchedFile)
         );
 
-        this.setState({ agglomerations });
+        this.setState({
+            agglomerations,
+            selectedAgglomeration: agglomerations[0],
+            population: new Population(50, agglomerations[0])
+        });
     }
 
     render() {
-        return <p>Lala</p>;
+        return <p>aaaa</p>;
     }
 }
 
 const files: string[] = [
-    "ali535",
     "berlin11_modified",
     "berlin52",
     "fl417",
+    "ali535",
     "gr666",
     "kroA100",
     "kroA150",

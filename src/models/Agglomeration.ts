@@ -23,7 +23,7 @@ export default class Agglomeration {
             dimension,
             linesArray[4].split(": ")[1],
             linesArray[5].split(": ")[1],
-            this.createTowns(linesArray.slice(6, 6 + dimension))
+            this.createTowns(linesArray.slice(7, 7 + dimension))
         );
     }
 
