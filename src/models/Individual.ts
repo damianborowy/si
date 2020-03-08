@@ -15,16 +15,16 @@ export default class Individual {
     }
 
     public makeGreedy(startingTown: Town) {
-        const visitedTowns = new Array<Town>();
-        visitedTowns.push(startingTown);
+        const visitedTowns = new Set<Town>();
+        visitedTowns.add(startingTown);
         let currentTown = startingTown;
 
-        while (visitedTowns.length < this.towns.length) {
+        while (visitedTowns.size < this.towns.length) {
             let minDistance = Number.MAX_VALUE;
             let minTown;
 
             for (let town of this.towns) {
-                if (visitedTowns.includes(town)) continue;
+                if (visitedTowns.has(town)) continue;
 
                 const distance = currentTown.calculateDistance(town);
                 if (distance < minDistance) {
@@ -35,11 +35,11 @@ export default class Individual {
 
             if (!minTown) throw new Error("Haven't found the closest town");
 
-            visitedTowns.push(minTown);
+            visitedTowns.add(minTown);
             currentTown = minTown;
         }
 
-        this.towns = visitedTowns;
+        this.towns = Array.from(visitedTowns);
     }
 
     public calculateTotalDistance() {

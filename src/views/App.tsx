@@ -44,6 +44,19 @@ class App extends React.Component<{}, IAppState> {
         this.setState({ selectedAgglomeration: agglomeration });
     };
 
+    componentDidUpdate() {
+        const individual = new Individual(
+            this.state.selectedAgglomeration.towns
+        );
+
+        let t0 = performance.now();
+        individual.makeGreedy(individual.towns[0]);
+        console.log(
+            `Time: ${performance.now() -
+                t0}ms, distance: ${individual.calculateTotalDistance()}`
+        );
+    }
+
     render() {
         return (
             <div className={styles.wrapper}>
