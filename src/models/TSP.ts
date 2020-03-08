@@ -1,6 +1,6 @@
 import Town from "./Town";
 
-export default class Agglomeration {
+export default class TSP {
     private constructor(
         public name: string,
         public type: string,
@@ -11,13 +11,13 @@ export default class Agglomeration {
         public towns: Town[]
     ) {}
 
-    public static fromTSP(fileAsText: string): Agglomeration {
+    public static fromFile(fileAsText: string): TSP {
         const linesArray: string[] = fileAsText.split("\n");
 
         const dimension = parseInt(linesArray[3].split(": ")[1]);
         const edgeWeightType = linesArray[4].split(": ")[1];
 
-        return new Agglomeration(
+        return new TSP(
             linesArray[0].split(": ")[1],
             linesArray[1].split(": ")[1],
             linesArray[2].split(": ")[1],

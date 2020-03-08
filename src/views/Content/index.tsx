@@ -1,9 +1,9 @@
 import React from "react";
 import styles from "./style.module.scss";
-import Agglomeration from "../../models/Agglomeration";
+import TSP from "../../models/TSP";
 
 interface IContentProps {
-    agglomeration: Agglomeration;
+    tsp: TSP;
 }
 
 export default class Content extends React.Component<IContentProps> {

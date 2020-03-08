@@ -1,10 +1,10 @@
-import Agglomeration from "./Agglomeration";
+import TSP from "./TSP";
 import Individual from "./Individual";
 
 export default class Population {
     constructor(
         public size: number,
-        public agglomeration: Agglomeration,
+        public tsp: TSP,
         public specimens: Individual[] = []
     ) {}
 }

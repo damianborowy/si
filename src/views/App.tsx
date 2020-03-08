@@ -1,19 +1,19 @@
 import React from "react";
-import Agglomeration from "../models/Agglomeration";
+import TSP from "../models/TSP";
 import styles from "./App.module.scss";
 import Sidebar from "./Sidebar";
 import Content from "./Content";
 import Individual from "../models/Individual";
 
 interface IAppState {
-    agglomerations: Agglomeration[];
-    selectedAgglomeration: Agglomeration;
+    tsps: TSP[];
+    selectedTSP: TSP;
 }
 
 class App extends React.Component<{}, IAppState> {
     state: Readonly<IAppState> = {
-        agglomerations: [],
-        selectedAgglomeration: null!
+        tsps: [],
+        selectedTSP: null!
     };
 
     async componentDidMount() {
@@ -24,30 +24,24 @@ class App extends React.Component<{}, IAppState> {
             )
         );
 
-        const agglomerations = fetchedFiles.map(fetchedFile =>
-            Agglomeration.fromTSP(fetchedFile)
-        );
+        const tsps = fetchedFiles.map(fetchedFile => TSP.fromFile(fetchedFile));
 
         this.setState({
-            agglomerations,
-            selectedAgglomeration: agglomerations[0]
+            tsps: tsps,
+            selectedTSP: tsps[0]
         });
     }
 
     onSidebarButtonClick = (filename: string) => {
-        const agglomeration = this.state.agglomerations.find(
-            agglomeration => agglomeration.name === filename
-        );
+        const tsp = this.state.tsps.find(tsp => tsp.name === filename);
 
-        if (!agglomeration) throw new Error("Incorrect agglomeration name");
+        if (!tsp) throw new Error("Incorrect agglomeration name");
 
-        this.setState({ selectedAgglomeration: agglomeration });
+        this.setState({ selectedTSP: tsp });
     };
 
     componentDidUpdate() {
-        const individual = new Individual(
-            this.state.selectedAgglomeration.towns
-        );
+        const individual = new Individual(this.state.selectedTSP.towns);
 
         const distances = individual.towns.map(town => {
             individual.makeGreedy(town);
@@ -69,7 +63,7 @@ class App extends React.Component<{}, IAppState> {
                     filenamesList={files}
                     onButtonClick={this.onSidebarButtonClick}
                 />
-                <Content agglomeration={this.state.selectedAgglomeration} />
+                <Content tsp={this.state.selectedTSP} />
             </div>
         );
     }
