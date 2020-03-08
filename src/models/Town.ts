@@ -35,28 +35,15 @@ export default class Town {
     }
 
     private calculateGeo(otherTown: Town) {
-        let deg = Math.floor(this.x);
-        let min = this.x - deg;
-        const latitudeI = (Math.PI * (deg + (5.0 * min) / 3.0)) / 180.0;
-
-        deg = Math.floor(this.y);
-        min = this.y - deg;
-        const longitudeI = (Math.PI * (deg + (5.0 * min) / 3.0)) / 180.0;
-
-        deg = Math.floor(otherTown.x);
-        min = otherTown.x - deg;
-        const latitudeJ = (Math.PI * (deg + (5.0 * min) / 3.0)) / 180.0;
-
-        deg = Math.floor(otherTown.y);
-        min = otherTown.y - deg;
-        const longitudeJ = (Math.PI * (deg + (5.0 * min) / 3.0)) / 180.0;
+        const latitudeI = (Math.PI * (2 * this.x)) / 180.0;
+        const longitudeI = (Math.PI * (2 * this.y)) / 180.0;
+        const latitudeJ = (Math.PI * (2 * otherTown.x)) / 180.0;
+        const longitudeJ = (Math.PI * (2 * otherTown.y)) / 180.0;
 
         const RRR = 6378.388;
         const q1 = Math.cos(longitudeI - longitudeJ);
         const q2 = Math.cos(latitudeI - latitudeJ);
         const q3 = Math.cos(latitudeI + latitudeJ);
-        return Math.round(
-            RRR * Math.acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3)) + 1.0
-        );
+        return RRR * Math.acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3)) + 1.0;
     }
 }

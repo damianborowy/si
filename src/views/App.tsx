@@ -49,11 +49,16 @@ class App extends React.Component<{}, IAppState> {
             this.state.selectedAgglomeration.towns
         );
 
-        let t0 = performance.now();
-        individual.makeGreedy(individual.towns[0]);
+        const distances = individual.towns.map(town => {
+            individual.makeGreedy(town);
+            return individual.calculateTotalDistance();
+        });
+
+        const minDistance = Math.min(...distances);
         console.log(
-            `Time: ${performance.now() -
-                t0}ms, distance: ${individual.calculateTotalDistance()}`
+            `Found minimum distance of ${minDistance} for town's index ${distances.indexOf(
+                minDistance
+            )}`
         );
     }
 

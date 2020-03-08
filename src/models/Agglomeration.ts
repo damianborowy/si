@@ -28,7 +28,10 @@ export default class Agglomeration {
         );
     }
 
-    static createTowns = (lines: string[], edgeWeightType: string): Town[] => {
+    private static createTowns = (
+        lines: string[],
+        edgeWeightType: string
+    ): Town[] => {
         const towns: Town[] = [];
 
         lines.forEach(line => {
