@@ -3,7 +3,6 @@ import TSP from "../models/TSP";
 import styles from "./App.module.scss";
 import Sidebar from "./Sidebar";
 import Content from "./Content";
-import Individual from "../models/Individual";
 
 interface IAppState {
     tsps: TSP[];
@@ -40,22 +39,6 @@ class App extends React.Component<{}, IAppState> {
         this.setState({ selectedTSP: tsp });
     };
 
-    componentDidUpdate() {
-        const individual = new Individual(this.state.selectedTSP.towns);
-
-        const distances = individual.towns.map(town => {
-            individual.makeGreedy(town);
-            return individual.calculateTotalDistance();
-        });
-
-        const minDistance = Math.min(...distances);
-        console.log(
-            `Found minimum distance of ${minDistance} for town's index ${distances.indexOf(
-                minDistance
-            )}`
-        );
-    }
-
     render() {
         return (
             <div className={styles.wrapper}>
@@ -72,12 +55,12 @@ class App extends React.Component<{}, IAppState> {
 const files: string[] = [
     "berlin11_modified",
     "berlin52",
-    "fl417",
-    "ali535",
-    "gr666",
     "kroA100",
     "kroA150",
     "kroA200",
+    "fl417",
+    "ali535",
+    "gr666",
     "nrw1379",
     "pr2392"
 ];

@@ -28,22 +28,22 @@ export default class Town {
         else throw new TypeError("Invalid agglomeration type");
     }
 
-    private calculateEuc2D(otherTown: Town) {
+    private calculateEuc2D(otherTown: Town): number {
         return Math.sqrt(
             (this.x - otherTown.x) ** 2 + (this.y - otherTown.y) ** 2
         );
     }
 
-    private calculateGeo(otherTown: Town) {
+    private calculateGeo(otherTown: Town): number {
         const latitudeI = (Math.PI * (2 * this.x)) / 180.0;
         const longitudeI = (Math.PI * (2 * this.y)) / 180.0;
         const latitudeJ = (Math.PI * (2 * otherTown.x)) / 180.0;
         const longitudeJ = (Math.PI * (2 * otherTown.y)) / 180.0;
 
-        const RRR = 6378.388;
+        const R = 6378.388;
         const q1 = Math.cos(longitudeI - longitudeJ);
         const q2 = Math.cos(latitudeI - latitudeJ);
         const q3 = Math.cos(latitudeI + latitudeJ);
-        return RRR * Math.acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3)) + 1.0;
+        return R * Math.acos(0.5 * ((1.0 + q1) * q2 - (1.0 - q1) * q3)) + 1.0;
     }
 }
