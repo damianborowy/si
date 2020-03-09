@@ -24,12 +24,12 @@ export default class Individual {
             let minTown;
 
             for (let town of this.towns) {
-                if (visitedTowns.has(town)) continue;
-
-                const distance = currentTown.calculateDistance(town);
-                if (distance < minDistance) {
-                    minDistance = distance;
-                    minTown = town;
+                if (!visitedTowns.has(town)) {
+                    const distance = currentTown.calculateDistance(town);
+                    if (distance < minDistance) {
+                        minDistance = distance;
+                        minTown = town;
+                    }
                 }
             }
 

@@ -15,10 +15,9 @@ export default class Population {
     }
 
     public makeGreedy() {
-        const randomArray = this.createRandomArray(
-            this.size,
-            this.tsp.towns.length
-        );
+        const randomArray = new Array(this.size)
+            .fill(0)
+            .map(() => Math.floor(Math.random() * this.tsp.towns.length));
 
         this.individuals.forEach((individual, index) => {
             individual.makeGreedy(individual.towns[randomArray[index]]);
@@ -47,11 +46,5 @@ export default class Population {
         );
 
         return Math.max(...distances);
-    }
-
-    private createRandomArray(size: number, maxValue: number): Array<number> {
-        return new Array(size)
-            .fill(0)
-            .map(() => Math.floor(Math.random() * maxValue));
     }
 }

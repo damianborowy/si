@@ -74,5 +74,5 @@ export default class Content extends React.Component<
     }
 }
 
-const randomsCount = 10000;
-const greedsCount = 50;
+const randomsCount = 1000;
+const greedsCount = 10;
