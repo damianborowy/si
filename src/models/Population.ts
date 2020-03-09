@@ -10,11 +10,11 @@ export default class Population {
             .map(() => new Individual(this.tsp.towns));
     }
 
-    public makeRandom() {
+    public makeRandom(): void {
         this.individuals.forEach(individual => individual.shuffle());
     }
 
-    public makeGreedy() {
+    public makeGreedy(): void {
         const randomArray = new Array(this.size)
             .fill(0)
             .map(() => Math.floor(Math.random() * this.tsp.towns.length));

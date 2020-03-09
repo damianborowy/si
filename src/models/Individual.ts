@@ -7,14 +7,14 @@ export default class Individual {
         this.towns = [...towns];
     }
 
-    public shuffle() {
+    public shuffle(): void {
         for (let i = this.towns.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
             [this.towns[i], this.towns[j]] = [this.towns[j], this.towns[i]];
         }
     }
 
-    public makeGreedy(startingTown: Town) {
+    public makeGreedy(startingTown: Town): void {
         const visitedTowns = new Set<Town>();
         visitedTowns.add(startingTown);
         let currentTown = startingTown;
@@ -42,7 +42,7 @@ export default class Individual {
         this.towns = Array.from(visitedTowns);
     }
 
-    public calculateTotalDistance() {
+    public calculateTotalDistance(): number {
         let sum = 0;
 
         for (let i = 0; i < this.towns.length - 1; i++)
