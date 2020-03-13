@@ -1,28 +1,25 @@
-import TSP from "./TSP";
-import Individual from "./Individual";
+import TSP from "../TSP";
+import Individual from "../Individual";
 
-export default class Population {
+export default abstract class Population {
     public individuals: Individual[];
 
     constructor(public size: number, public tsp: TSP) {
+        if (!tsp) {
+            this.individuals = [];
+            return;
+        }
+
+        if (size > tsp.dimension) this.size = tsp.dimension;
+
         this.individuals = new Array<Individual>(this.size)
             .fill(undefined!)
             .map(() => new Individual(this.tsp.towns));
+
+        this.initialize();
     }
 
-    public makeRandom(): void {
-        this.individuals.forEach(individual => individual.shuffle());
-    }
-
-    public makeGreedy(): void {
-        const randomArray = new Array(this.size)
-            .fill(0)
-            .map(() => Math.floor(Math.random() * this.tsp.towns.length));
-
-        this.individuals.forEach((individual, index) => {
-            individual.makeGreedy(individual.towns[randomArray[index]]);
-        });
-    }
+    protected abstract initialize(): void;
 
     public calculateBestDistance(): number {
         const distances = this.individuals.map(individual =>

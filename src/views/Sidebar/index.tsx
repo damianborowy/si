@@ -1,13 +1,16 @@
 import React from "react";
 import styles from "./style.module.scss";
-import { Button } from "antd";
+import { InputNumber, Select, Button } from "antd";
+import { SelectValue } from "antd/lib/select";
 
 interface ISidebarProps {
     filenamesList: string[];
-    onButtonClick: (filename: string) => void;
+    isWorking: boolean;
+    toggleWorkingState: () => void;
+    onFilenameChange: (filename: string) => void;
 }
 
-interface ISidebarState {
+export interface ISidebarState {
     selectedFilename: string;
 }
 
@@ -16,34 +19,121 @@ export default class Sidebar extends React.Component<ISidebarProps> {
         selectedFilename: this.props.filenamesList[0]
     };
 
-    onButtonClick = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-        const selectedFilename = event.currentTarget.textContent;
+    onFilenameChange = (value: SelectValue) => {
+        if (!value) throw new Error("Incorrect filename");
 
-        if (!selectedFilename) throw new Error("Incorrect filename");
+        this.setState({ selectedFilename: value });
+        this.props.onFilenameChange(value.toString());
+    };
 
-        this.setState({ selectedFilename });
-        this.props.onButtonClick(selectedFilename);
+    startCalculations = () => {
+        this.props.toggleWorkingState();
     };
 
     render() {
+        const { Option } = Select;
+        const { isWorking } = this.props;
+
         return (
             <div className={styles.sidebar}>
-                {this.props.filenamesList.map(filename => (
-                    <Button
-                        className={styles.button}
-                        key={filename}
-                        type={
-                            this.state.selectedFilename === filename
-                                ? "primary"
-                                : "default"
-                        }
-                        onClick={this.onButtonClick}
-                        value={filename}
-                        block
+                <div>
+                    <b>Plik:</b>
+                    <Select
+                        className={styles.select}
+                        onChange={this.onFilenameChange}
+                        defaultValue={this.state.selectedFilename}
                     >
-                        {filename}
-                    </Button>
-                ))}
+                        {this.props.filenamesList.map(filename => (
+                            <Option value={filename}>{filename}</Option>
+                        ))}
+                    </Select>
+                </div>
+                <div>
+                    <b>Algorytm selekcji:</b>
+                    <br />
+                    <Select className={styles.select}>
+                        <Option value="Tournament">Tournament</Option>
+                        <Option value="Roulette">Roulette</Option>
+                    </Select>
+                </div>
+                <div>
+                    <b>Algorytm krzyżowania:</b>
+                    <br />
+                    <Select className={styles.select} defaultValue="Ordered">
+                        <Option value="Ordered">Ordered</Option>
+                    </Select>
+                </div>
+                <div>
+                    <b>Algorytm mutowania:</b>
+                    <br />
+                    <Select className={styles.select}>
+                        <Option value="Swap">Swap</Option>
+                        <Option value="Inversion">Inversion</Option>
+                    </Select>
+                </div>
+                <div>
+                    <b>Tour:</b>
+                    <br />
+                    <InputNumber
+                        className={styles.input}
+                        min={0}
+                        max={50}
+                        defaultValue={5}
+                    />
+                </div>
+                <div>
+                    <b>Rozmiar populacji:</b>
+                    <br />
+                    <InputNumber
+                        className={styles.input}
+                        min={0}
+                        max={2500}
+                        step={10}
+                        defaultValue={500}
+                    />
+                </div>
+                <div>
+                    <b>Generacje:</b>
+                    <br />
+                    <InputNumber
+                        className={styles.input}
+                        min={0}
+                        max={2500}
+                        step={10}
+                        defaultValue={500}
+                    />
+                </div>
+                <div>
+                    <b>Px:</b>
+                    <br />
+                    <InputNumber
+                        className={styles.input}
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        defaultValue={0.7}
+                    />
+                </div>
+                <div>
+                    <b>PM:</b>
+                    <br />
+                    <InputNumber
+                        className={styles.input}
+                        min={0}
+                        max={1}
+                        step={0.1}
+                        defaultValue={0.1}
+                    />
+                </div>
+                <Button
+                    className={styles.button}
+                    type="primary"
+                    loading={isWorking}
+                    onClick={this.startCalculations}
+                    block
+                >
+                    {isWorking ? "Calculating..." : "Start"}
+                </Button>
             </div>
         );
     }

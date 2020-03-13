@@ -2,8 +2,22 @@
     flex: 1;
     min-width: 150px;
     padding: 10px;
+    height: 100%;
 }
 
-.button {
+.sidebar > div {
+    margin: 10px 0;
+}
+
+div .button {
     margin: 2px 0;
+    height: 22%;
+}
+
+.select {
+    width: 100%;
+}
+
+div .input {
+    width: 100%;
 }

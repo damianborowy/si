@@ -1,18 +1,22 @@
 import React from "react";
 import TSP from "../models/TSP";
 import styles from "./App.module.scss";
-import Sidebar from "./Sidebar";
+import Sidebar, { ISidebarState } from "./Sidebar";
 import Content from "./Content";
 
 interface IAppState {
     tsps: TSP[];
     selectedTSP: TSP;
+    isWorking: boolean;
+    settings: ISidebarState;
 }
 
 class App extends React.Component<{}, IAppState> {
     state: Readonly<IAppState> = {
         tsps: [],
-        selectedTSP: null!
+        selectedTSP: null!,
+        isWorking: false,
+        settings: null
     };
 
     async componentDidMount() {
@@ -39,14 +43,28 @@ class App extends React.Component<{}, IAppState> {
         this.setState({ selectedTSP: tsp });
     };
 
+    toggleWorkingState = () => {
+        this.setState({ isWorking: !this.state.isWorking });
+    };
+
     render() {
         return (
             <div className={styles.wrapper}>
                 <Sidebar
                     filenamesList={files}
-                    onButtonClick={this.onSidebarButtonClick}
+                    isWorking={this.state.isWorking}
+                    toggleWorkingState={this.toggleWorkingState}
+                    onFilenameChange={this.onSidebarButtonClick}
                 />
-                <Content tsp={this.state.selectedTSP} />
+                {this.state.selectedTSP ? (
+                    <Content
+                        tsp={this.state.selectedTSP}
+                        isWorking={this.state.isWorking}
+                        toggleWorkingState={this.toggleWorkingState}
+                    />
+                ) : (
+                    ""
+                )}
             </div>
         );
     }
