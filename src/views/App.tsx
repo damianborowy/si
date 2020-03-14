@@ -3,12 +3,22 @@ import TSP from "../models/TSP";
 import styles from "./App.module.scss";
 import Sidebar, { ISidebarState } from "./Sidebar";
 import Content from "./Content";
+import DataPoints from "../models/DataPoints";
+import Population from "../models/population/Population";
+import RandomPopulation from "../models/population/RandomPopulation";
+import GeneticPopulation from "../models/population/GeneticPopulation";
+import Point from "../models/Point";
+import ICrossing from "../models/crossing/ICrossing";
+import IMutation from "../models/mutation/IMutation";
+import ISelection from "../models/selection/ISelection";
 
 interface IAppState {
     tsps: TSP[];
     selectedTSP: TSP;
     isWorking: boolean;
     settings: ISidebarState;
+    dataPoints: DataPoints;
+    currentChartFilename: string;
 }
 
 class App extends React.Component<{}, IAppState> {
@@ -16,7 +26,9 @@ class App extends React.Component<{}, IAppState> {
         tsps: [],
         selectedTSP: null!,
         isWorking: false,
-        settings: null
+        settings: null,
+        dataPoints: new DataPoints(),
+        currentChartFilename: null
     };
 
     async componentDidMount() {
@@ -35,6 +47,10 @@ class App extends React.Component<{}, IAppState> {
         });
     }
 
+    updateSettings = (settings: ISidebarState) => {
+        this.setState({ settings });
+    };
+
     onSidebarButtonClick = (filename: string) => {
         const tsp = this.state.tsps.find(tsp => tsp.name === filename);
 
@@ -43,9 +59,125 @@ class App extends React.Component<{}, IAppState> {
         this.setState({ selectedTSP: tsp });
     };
 
-    toggleWorkingState = () => {
-        this.setState({ isWorking: !this.state.isWorking });
+    startCalculations = () => {
+        const {
+            populationSize,
+            generations,
+            selectionAlgorithm,
+            crossingAlgorithm,
+            mutationAlgorithm,
+            Px,
+            Pm
+        } = this.state.settings;
+
+        const dataPoints = new DataPoints();
+        let population: Population = new RandomPopulation(
+            populationSize,
+            this.state.selectedTSP
+        );
+
+        this.evaluate(population, dataPoints);
+
+        for (let i = 1; i < generations; i++) {
+            const selectedPopulation = this.select(
+                population,
+                selectionAlgorithm
+            );
+            const crossedPopulation = this.cross(
+                selectedPopulation,
+                crossingAlgorithm,
+                Px
+            );
+            const mutatedPopulation = this.mutate(
+                crossedPopulation,
+                mutationAlgorithm,
+                Pm
+            );
+
+            this.evaluate(mutatedPopulation, dataPoints);
+            population = mutatedPopulation;
+            console.log(population);
+        }
+
+        this.setState({ dataPoints });
     };
+
+    cross(
+        population: Population,
+        crossingAlgorithm: ICrossing,
+        Px: number
+    ): Population {
+        const crossedPopulation = new GeneticPopulation();
+
+        population.individuals.forEach(individual => {
+            const randomIndex = ~~(
+                Math.random() * population.individuals.length
+            );
+
+            if (Math.random() > Px)
+                crossedPopulation.individuals.push(
+                    crossingAlgorithm.evaluate(
+                        individual,
+                        population.individuals[randomIndex]
+                    )
+                );
+            else crossedPopulation.individuals.push(individual);
+        });
+
+        return crossedPopulation;
+    }
+
+    mutate(
+        population: Population,
+        mutationAlgorithm: IMutation,
+        PM: number
+    ): Population {
+        const mutatedPopulation = new GeneticPopulation();
+
+        population.individuals.forEach(individual => {
+            if (Math.random() > PM)
+                mutatedPopulation.individuals.push(individual);
+            else
+                mutatedPopulation.individuals.push(
+                    mutationAlgorithm.evaluate(individual)
+                );
+        });
+
+        return mutatedPopulation;
+    }
+
+    select(population: Population, selectionAlgorithm: ISelection): Population {
+        const selectedPopulation = new GeneticPopulation();
+
+        population.individuals.forEach(() => {
+            selectedPopulation.individuals.push(
+                selectionAlgorithm.evaluate(population)
+            );
+        });
+
+        return selectedPopulation;
+    }
+
+    evaluate(population: Population, dataPoints: DataPoints) {
+        dataPoints.best.push(
+            new Point(
+                dataPoints.best.length,
+                population.calculateBestDistance()
+            )
+        );
+        dataPoints.average.push(
+            new Point(
+                dataPoints.average.length,
+                population.calculateAverageDistance()
+            )
+        );
+        dataPoints.worst.push(
+            new Point(
+                dataPoints.worst.length,
+                population.calculateWorstDistance()
+            )
+        );
+    }
 
     render() {
         return (
@@ -53,14 +185,13 @@ class App extends React.Component<{}, IAppState> {
                 <Sidebar
                     filenamesList={files}
                     isWorking={this.state.isWorking}
-                    toggleWorkingState={this.toggleWorkingState}
-                    onFilenameChange={this.onSidebarButtonClick}
+                    updateSettings={this.updateSettings}
+                    startCalculations={this.startCalculations}
                 />
                 {this.state.selectedTSP ? (
                     <Content
-                        tsp={this.state.selectedTSP}
-                        isWorking={this.state.isWorking}
-                        toggleWorkingState={this.toggleWorkingState}
+                        currentChartFilename={this.state.currentChartFilename}
+                        dataPoints={this.state.dataPoints}
                     />
                 ) : (
                     ""
