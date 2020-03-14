@@ -4,22 +4,31 @@ import Individual from "../Individual";
 
 export default class RouletteSelection implements ISelection {
     evaluate(population: Population): Individual {
-        let sum = 0;
-
-        population.individuals.forEach(
-            individual =>
-                (sum += 1 / Math.pow(individual.calculateTotalDistance(), 10))
-        );
-
-        const random = Math.random() * sum;
-        let sum2 = 0;
+        let maxLength = 0,
+            minLength = Number.MAX_VALUE;
 
         population.individuals.forEach(individual => {
-            sum2 += 1 / Math.pow(individual.calculateTotalDistance(), 10);
+            const distance = individual.calculateTotalDistance();
 
-            if (sum2 >= random) return individual;
+            if (distance > maxLength) maxLength = distance;
+            if (distance < minLength) minLength = distance;
         });
 
-        return null;
+        let sumFitness = 0;
+        population.individuals.forEach(
+            individual =>
+                (sumFitness +=
+                    (minLength * 1) / individual.calculateTotalDistance())
+        );
+
+        let sum = 0;
+
+        population.individuals.forEach(individual => {
+            sum += (minLength * 1) / individual.calculateTotalDistance();
+
+            if (Math.random() < sum) return individual;
+        });
+
+        throw new Error("Eh...");
     }
 }

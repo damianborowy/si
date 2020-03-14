@@ -10,10 +10,10 @@ export default class OrderedCrossover implements ICrossing {
             [firstIndex, secondIndex] = [secondIndex, firstIndex];
 
         const firstTowns = first.towns.slice(firstIndex, secondIndex);
-        const firstTownsIndices = firstTowns.map(town => town.index);
+        const firstTownsIndices = new Set(firstTowns.map(town => town.index));
 
         const towns = second.towns.filter(
-            town => !firstTownsIndices.includes(town.index)
+            town => !firstTownsIndices.has(town.index)
         );
 
         towns.splice(firstIndex, 0, ...firstTowns);

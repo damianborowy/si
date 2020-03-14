@@ -21,6 +21,9 @@ export default class Content extends React.Component<IContentProps> {
                             title: {
                                 text: this.props.currentChartFilename
                             },
+                            toolTip: {
+                                shared: true
+                            },
                             data: [
                                 {
                                     type: "line",

@@ -43,12 +43,19 @@ class App extends React.Component<{}, IAppState> {
 
         this.setState({
             tsps: tsps,
-            selectedTSP: tsps[0]
+            selectedTSP: tsps[1]
         });
     }
 
     updateSettings = (settings: ISidebarState) => {
-        this.setState({ settings });
+        console.log(settings);
+
+        this.setState({
+            settings,
+            selectedTSP: this.state.tsps[
+                files.findIndex(filename => filename === settings.filename)
+            ]
+        });
     };
 
     onSidebarButtonClick = (filename: string) => {
@@ -96,7 +103,6 @@ class App extends React.Component<{}, IAppState> {
 
             this.evaluate(mutatedPopulation, dataPoints);
             population = mutatedPopulation;
-            console.log(population);
         }
 
         this.setState({ dataPoints });
@@ -168,7 +174,10 @@ class App extends React.Component<{}, IAppState> {
         dataPoints.average.push(
             new Point(
                 dataPoints.average.length,
-                population.calculateAverageDistance()
+                Math.round(
+                    (population.calculateAverageDistance() + Number.EPSILON) *
+                        100
+                ) / 100
             )
         );
         dataPoints.worst.push(

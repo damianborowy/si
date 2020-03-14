@@ -2,12 +2,14 @@ import React from "react";
 import styles from "./style.module.scss";
 import { InputNumber, Select, Button } from "antd";
 import { SelectValue } from "antd/lib/select";
-import ISelection from "../../models/selection/ISelection";
 import ICrossing from "../../models/crossing/ICrossing";
 import IMutation from "../../models/mutation/IMutation";
 import TournamentSelection from "../../models/selection/TournamentSelection";
 import OrderedCrossover from "../../models/crossing/OrderedCrossover";
 import SwapMutation from "../../models/mutation/SwapMutation";
+import InversionMutation from "../../models/mutation/InversionMutation";
+import RouletteSelection from "../../models/selection/RouletteSelection";
+import ISelection from "../../models/selection/ISelection";
 
 interface ISidebarProps {
     filenamesList: string[];
@@ -37,8 +39,8 @@ export default class Sidebar extends React.Component<ISidebarProps> {
         tour: 5,
         populationSize: 100,
         generations: 1000,
-        Px: 0.75,
-        Pm: 0.15
+        Px: 0.05,
+        Pm: 0.2
     };
 
     componentDidMount() {
@@ -47,13 +49,79 @@ export default class Sidebar extends React.Component<ISidebarProps> {
 
     updateSettings = () => {
         this.props.updateSettings(this.state);
+        console.log(this.state);
     };
 
     onFilenameChange = (value: SelectValue) => {
-        if (!value) throw new Error("Incorrect filename");
+        this.setState({ filename: value }, this.updateSettings);
+    };
 
-        this.setState({ selectedFilename: value });
-        this.updateSettings();
+    onSelectionAlgorithmChange = (value: SelectValue) => {
+        let selectionAlgorithm: ISelection;
+
+        switch (value) {
+            case "Tournament":
+                selectionAlgorithm = new TournamentSelection(this.state.tour);
+                break;
+            case "Roulette":
+                selectionAlgorithm = new RouletteSelection();
+                break;
+            default:
+                throw new Error("Selected incorrect selection algorithm");
+        }
+
+        this.setState({ selectionAlgorithm }, this.updateSettings);
+    };
+
+    onCrossingAlgorithmChange = (value: SelectValue) => {
+        let crossingAlgorithm: ICrossing;
+
+        switch (value) {
+            case "Ordered":
+                crossingAlgorithm = new OrderedCrossover();
+                break;
+            default:
+                throw new Error("Selected incorrect crossing algorithm");
+        }
+
+        this.setState({ crossingAlgorithm }, this.updateSettings);
+    };
+
+    onMutationAlgorithmChange = (value: SelectValue) => {
+        let mutationAlgorithm: IMutation;
+
+        switch (value) {
+            case "Swap":
+                mutationAlgorithm = new SwapMutation();
+                break;
+            case "Inversion":
+                mutationAlgorithm = new InversionMutation();
+                break;
+            default:
+                throw new Error("Selected incorrect mutation algorithm");
+        }
+
+        this.setState({ mutationAlgorithm }, this.updateSettings);
+    };
+
+    onTourChange = (value: number) => {
+        this.setState({ tour: value }, this.updateSettings);
+    };
+
+    onPopulationSizeChange = (value: number) => {
+        this.setState({ populationSize: value }, this.updateSettings);
+    };
+
+    onGenerationsChange = (value: number) => {
+        this.setState({ generations: value }, this.updateSettings);
+    };
+
+    onPxChange = (value: number) => {
+        this.setState({ Px: value }, this.updateSettings);
+    };
+
+    onPmChange = (value: number) => {
+        this.setState({ Pm: value }, this.updateSettings);
     };
 
     render() {
@@ -77,7 +145,11 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                 <div>
                     <b>Algorytm selekcji:</b>
                     <br />
-                    <Select className={styles.select} defaultValue="Tournament">
+                    <Select
+                        className={styles.select}
+                        onChange={this.onSelectionAlgorithmChange}
+                        defaultValue="Tournament"
+                    >
                         <Option value="Tournament">Tournament</Option>
                         <Option value="Roulette">Roulette</Option>
                     </Select>
@@ -85,14 +157,22 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                 <div>
                     <b>Algorytm krzyżowania:</b>
                     <br />
-                    <Select className={styles.select} defaultValue="Ordered">
+                    <Select
+                        className={styles.select}
+                        onChange={this.onCrossingAlgorithmChange}
+                        defaultValue="Ordered"
+                    >
                         <Option value="Ordered">Ordered</Option>
                     </Select>
                 </div>
                 <div>
                     <b>Algorytm mutowania:</b>
                     <br />
-                    <Select className={styles.select} defaultValue="Swap">
+                    <Select
+                        className={styles.select}
+                        onChange={this.onMutationAlgorithmChange}
+                        defaultValue="Swap"
+                    >
                         <Option value="Swap">Swap</Option>
                         <Option value="Inversion">Inversion</Option>
                     </Select>
@@ -105,6 +185,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                         min={0}
                         max={50}
                         defaultValue={5}
+                        onChange={this.onTourChange}
                     />
                 </div>
                 <div>
@@ -116,6 +197,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                         max={2500}
                         step={10}
                         defaultValue={100}
+                        onChange={this.onPopulationSizeChange}
                     />
                 </div>
                 <div>
@@ -127,6 +209,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                         max={2500}
                         step={10}
                         defaultValue={1000}
+                        onChange={this.onGenerationsChange}
                     />
                 </div>
                 <div>
@@ -138,6 +221,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                         max={1}
                         step={0.01}
                         defaultValue={0.75}
+                        onChange={this.onPxChange}
                     />
                 </div>
                 <div>
@@ -149,6 +233,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                         max={1}
                         step={0.01}
                         defaultValue={0.15}
+                        onChange={this.onPmChange}
                     />
                 </div>
                 <Button
