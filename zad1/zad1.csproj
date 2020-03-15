@@ -11,6 +11,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     </ItemGroup>
 
     <ItemGroup>
@@ -37,30 +38,7 @@
       <TypeScriptCompile Include="ClientApp\src\components\Content\index.tsx" />
       <TypeScriptCompile Include="ClientApp\src\components\Sidebar\index.tsx" />
       <TypeScriptCompile Include="ClientApp\src\index.tsx" />
-      <TypeScriptCompile Include="ClientApp\src\models\crossing\ICrossing.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\crossing\OrderedCrossover.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\DataPoints.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\Individual.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\mutation\IMutation.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\mutation\InversionMutation.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\mutation\SwapMutation.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\Point.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\population\GeneticPopulation.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\population\GreedyPopulation.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\population\Population.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\population\RandomPopulation.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\selection\ISelection.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\selection\RouletteSelection.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\selection\TournamentSelection.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\Town.ts" />
-      <TypeScriptCompile Include="ClientApp\src\models\TSP.ts" />
       <TypeScriptCompile Include="ClientApp\src\react-app-env.d.ts" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Algorithms\Crossing" />
-      <Folder Include="Algorithms\Mutation" />
-      <Folder Include="Algorithms\Selection" />
     </ItemGroup>
 
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

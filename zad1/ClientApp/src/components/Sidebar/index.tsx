@@ -1,13 +1,7 @@
 import React from "react";
 import styles from "./style.module.scss";
-import { InputNumber, Select, Button } from "antd";
-import { SelectValue } from "antd/lib/select";
-import ICrossing from "../../models/crossing/ICrossing";
-import IMutation from "../../models/mutation/IMutation";
-import TournamentSelection from "../../models/selection/TournamentSelection";
-import OrderedCrossover from "../../models/crossing/OrderedCrossover";
-import SwapMutation from "../../models/mutation/SwapMutation";
-import ISelection from "../../models/selection/ISelection";
+import {InputNumber, Select, Button} from "antd";
+import {SelectValue} from "antd/lib/select";
 
 interface ISidebarProps {
     isWorking: boolean;
@@ -37,8 +31,8 @@ export default class Sidebar extends React.Component<ISidebarProps> {
         tour: 5,
         populationSize: 100,
         generations: 1000,
-        Px: 0.05,
-        Pm: 0.2
+        Px: 0.75,
+        Pm: 0.15
     };
 
     componentDidMount() {
@@ -50,44 +44,44 @@ export default class Sidebar extends React.Component<ISidebarProps> {
     };
 
     onFilenameChange = (value: SelectValue) => {
-        this.setState({ filename: value }, this.updateSettings);
+        this.setState({filename: value}, this.updateSettings);
     };
 
     onSelectionAlgorithmChange = (value: SelectValue) => {
-        this.setState({ selectionAlgorithm: value }, this.updateSettings);
+        this.setState({selectionAlgorithm: value}, this.updateSettings);
     };
 
     onCrossingAlgorithmChange = (value: SelectValue) => {
-        this.setState({ crossingAlgorithm: value }, this.updateSettings);
+        this.setState({crossingAlgorithm: value}, this.updateSettings);
     };
 
     onMutationAlgorithmChange = (value: SelectValue) => {
-        this.setState({ mutationAlgorithm: value }, this.updateSettings);
+        this.setState({mutationAlgorithm: value}, this.updateSettings);
     };
 
     onTourChange = (value: number) => {
-        this.setState({ tour: value }, this.updateSettings);
+        this.setState({tour: value}, this.updateSettings);
     };
 
     onPopulationSizeChange = (value: number) => {
-        this.setState({ populationSize: value }, this.updateSettings);
+        this.setState({populationSize: value}, this.updateSettings);
     };
 
     onGenerationsChange = (value: number) => {
-        this.setState({ generations: value }, this.updateSettings);
+        this.setState({generations: value}, this.updateSettings);
     };
 
     onPxChange = (value: number) => {
-        this.setState({ Px: value }, this.updateSettings);
+        this.setState({Px: value}, this.updateSettings);
     };
 
     onPmChange = (value: number) => {
-        this.setState({ Pm: value }, this.updateSettings);
+        this.setState({Pm: value}, this.updateSettings);
     };
 
     render() {
-        const { Option } = Select;
-        const { isWorking, files } = this.props;
+        const {Option} = Select;
+        const {isWorking, files} = this.props;
 
         if (!files) return <b>Loading...</b>;
 
@@ -106,11 +100,11 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                 </div>
                 <div>
                     <b>Algorytm selekcji:</b>
-                    <br />
+                    <br/>
                     <Select
                         className={styles.select}
                         onChange={this.onSelectionAlgorithmChange}
-                        defaultValue="Tournament"
+                        defaultValue={this.state.selectionAlgorithm}
                     >
                         <Option value="Tournament">Tournament</Option>
                         <Option value="Roulette">Roulette</Option>
@@ -118,22 +112,22 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                 </div>
                 <div>
                     <b>Algorytm krzyżowania:</b>
-                    <br />
+                    <br/>
                     <Select
                         className={styles.select}
                         onChange={this.onCrossingAlgorithmChange}
-                        defaultValue="Ordered"
+                        defaultValue={this.state.crossingAlgorithm}
                     >
                         <Option value="Ordered">Ordered</Option>
                     </Select>
                 </div>
                 <div>
                     <b>Algorytm mutowania:</b>
-                    <br />
+                    <br/>
                     <Select
                         className={styles.select}
                         onChange={this.onMutationAlgorithmChange}
-                        defaultValue="Swap"
+                        defaultValue={this.state.mutationAlgorithm}
                     >
                         <Option value="Swap">Swap</Option>
                         <Option value="Inversion">Inversion</Option>
@@ -141,60 +135,60 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                 </div>
                 <div>
                     <b>Tour:</b>
-                    <br />
+                    <br/>
                     <InputNumber
                         className={styles.input}
                         min={0}
                         max={50}
-                        defaultValue={5}
+                        defaultValue={this.state.tour}
                         onChange={this.onTourChange}
                     />
                 </div>
                 <div>
                     <b>Rozmiar populacji:</b>
-                    <br />
+                    <br/>
                     <InputNumber
                         className={styles.input}
                         min={0}
                         max={2500}
                         step={10}
-                        defaultValue={100}
+                        defaultValue={this.state.populationSize}
                         onChange={this.onPopulationSizeChange}
                     />
                 </div>
                 <div>
                     <b>Generacje:</b>
-                    <br />
+                    <br/>
                     <InputNumber
                         className={styles.input}
                         min={0}
                         max={2500}
                         step={10}
-                        defaultValue={1000}
+                        defaultValue={this.state.generations}
                         onChange={this.onGenerationsChange}
                     />
                 </div>
                 <div>
                     <b>Px:</b>
-                    <br />
+                    <br/>
                     <InputNumber
                         className={styles.input}
                         min={0}
                         max={1}
                         step={0.01}
-                        defaultValue={0.75}
+                        defaultValue={this.state.Px}
                         onChange={this.onPxChange}
                     />
                 </div>
                 <div>
                     <b>Pm:</b>
-                    <br />
+                    <br/>
                     <InputNumber
                         className={styles.input}
                         min={0}
                         max={1}
                         step={0.01}
-                        defaultValue={0.15}
+                        defaultValue={this.state.Pm}
                         onChange={this.onPmChange}
                     />
                 </div>

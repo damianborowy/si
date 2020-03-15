@@ -1,7 +1,8 @@
-﻿using System.Collections;
+﻿using System;
 using System.Collections.Generic;
+using back.Models;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 namespace back.Controllers
 {
@@ -24,15 +25,19 @@ namespace back.Controllers
         };
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IEnumerable<string> GetFiles()
         {
             return Files;
         }
 
         [HttpPost]
-        public IEnumerable<string> CalculateDataPoints()
+        public DataPoints CalculateDataPoints([FromBody] AlgorithmSettings settings)
         {
-            return new[] {"lala", "lele"};
+            Console.WriteLine(JsonConvert.SerializeObject(settings));
+
+            var tsp = TSP.FromFile(settings.Filename);
+
+            return tsp.SolveTsp(settings);
         }
     }
 }
