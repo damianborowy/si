@@ -1,0 +1,92 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TypeScriptCompileBlocked>true</TypeScriptCompileBlocked>
+        <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+        <IsPackable>false</IsPackable>
+        <SpaRoot>ClientApp\</SpaRoot>
+        <DefaultItemExcludes>$(DefaultItemExcludes);$(SpaRoot)node_modules\**</DefaultItemExcludes>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <!-- Don't publish the SPA source files, but do show them in the project files list -->
+        <Content Remove="$(SpaRoot)**" />
+        <Content Include="ClientApp\.gitignore" />
+        <Content Include="ClientApp\package.json" />
+        <Content Include="ClientApp\public\favicon.ico" />
+        <Content Include="ClientApp\public\index.html" />
+        <Content Include="ClientApp\README.md" />
+        <Content Include="ClientApp\src\canvasjs\canvasjs.min.js" />
+        <Content Include="ClientApp\src\canvasjs\canvasjs.react.js" />
+        <Content Include="ClientApp\src\components\App.module.scss" />
+        <Content Include="ClientApp\src\components\Content\style.module.scss" />
+        <Content Include="ClientApp\src\components\Sidebar\style.module.scss" />
+        <Content Include="ClientApp\tsconfig.json" />
+        <Content Include="ClientApp\yarn.lock" />
+        <None Remove="$(SpaRoot)**" />
+        <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <TypeScriptCompile Include="ClientApp\src\components\App.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\components\Content\index.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\components\Sidebar\index.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\index.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\models\crossing\ICrossing.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\crossing\OrderedCrossover.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\DataPoints.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\Individual.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\mutation\IMutation.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\mutation\InversionMutation.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\mutation\SwapMutation.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\Point.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\population\GeneticPopulation.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\population\GreedyPopulation.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\population\Population.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\population\RandomPopulation.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\selection\ISelection.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\selection\RouletteSelection.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\selection\TournamentSelection.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\Town.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\TSP.ts" />
+      <TypeScriptCompile Include="ClientApp\src\react-app-env.d.ts" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Algorithms\Crossing" />
+      <Folder Include="Algorithms\Mutation" />
+      <Folder Include="Algorithms\Selection" />
+    </ItemGroup>
+
+    <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
+        <!-- Ensure Node.js is installed -->
+        <Exec Command="node --version" ContinueOnError="true">
+            <Output TaskParameter="ExitCode" PropertyName="ErrorCode" />
+        </Exec>
+        <Error Condition="'$(ErrorCode)' != '0'" Text="Node.js is required to build and run this project. To continue, please install Node.js from https://nodejs.org/, and then restart your command prompt or IDE." />
+        <Message Importance="high" Text="Restoring dependencies using 'npm'. This may take several minutes..." />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+    </Target>
+
+    <Target Name="PublishRunWebpack" AfterTargets="ComputeFilesToPublish">
+        <!-- As part of publishing, ensure the JS resources are freshly built in production mode -->
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm install" />
+        <Exec WorkingDirectory="$(SpaRoot)" Command="npm run build" />
+
+        <!-- Include the newly-built files in the publish output -->
+        <ItemGroup>
+            <DistFiles Include="$(SpaRoot)build\**" />
+            <ResolvedFileToPublish Include="@(DistFiles->'%(FullPath)')" Exclude="@(ResolvedFileToPublish)">
+                <RelativePath>%(DistFiles.Identity)</RelativePath>
+                <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+                <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+            </ResolvedFileToPublish>
+        </ItemGroup>
+    </Target>
+
+</Project>

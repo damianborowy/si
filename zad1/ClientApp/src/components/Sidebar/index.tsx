@@ -7,22 +7,20 @@ import IMutation from "../../models/mutation/IMutation";
 import TournamentSelection from "../../models/selection/TournamentSelection";
 import OrderedCrossover from "../../models/crossing/OrderedCrossover";
 import SwapMutation from "../../models/mutation/SwapMutation";
-import InversionMutation from "../../models/mutation/InversionMutation";
-import RouletteSelection from "../../models/selection/RouletteSelection";
 import ISelection from "../../models/selection/ISelection";
 
 interface ISidebarProps {
-    filenamesList: string[];
     isWorking: boolean;
     updateSettings: (settings: ISidebarState) => void;
     startCalculations: () => void;
+    files: string[];
 }
 
 export interface ISidebarState {
     filename: string;
-    selectionAlgorithm: ISelection;
-    crossingAlgorithm: ICrossing;
-    mutationAlgorithm: IMutation;
+    selectionAlgorithm: string;
+    crossingAlgorithm: string;
+    mutationAlgorithm: string;
     tour: number;
     populationSize: number;
     generations: number;
@@ -32,10 +30,10 @@ export interface ISidebarState {
 
 export default class Sidebar extends React.Component<ISidebarProps> {
     state: Readonly<ISidebarState> = {
-        filename: this.props.filenamesList[0],
-        selectionAlgorithm: new TournamentSelection(5),
-        crossingAlgorithm: new OrderedCrossover(),
-        mutationAlgorithm: new SwapMutation(),
+        filename: null,
+        selectionAlgorithm: "Tournament",
+        crossingAlgorithm: "Ordered",
+        mutationAlgorithm: "Swap",
         tour: 5,
         populationSize: 100,
         generations: 1000,
@@ -49,7 +47,6 @@ export default class Sidebar extends React.Component<ISidebarProps> {
 
     updateSettings = () => {
         this.props.updateSettings(this.state);
-        console.log(this.state);
     };
 
     onFilenameChange = (value: SelectValue) => {
@@ -57,51 +54,15 @@ export default class Sidebar extends React.Component<ISidebarProps> {
     };
 
     onSelectionAlgorithmChange = (value: SelectValue) => {
-        let selectionAlgorithm: ISelection;
-
-        switch (value) {
-            case "Tournament":
-                selectionAlgorithm = new TournamentSelection(this.state.tour);
-                break;
-            case "Roulette":
-                selectionAlgorithm = new RouletteSelection();
-                break;
-            default:
-                throw new Error("Selected incorrect selection algorithm");
-        }
-
-        this.setState({ selectionAlgorithm }, this.updateSettings);
+        this.setState({ selectionAlgorithm: value }, this.updateSettings);
     };
 
     onCrossingAlgorithmChange = (value: SelectValue) => {
-        let crossingAlgorithm: ICrossing;
-
-        switch (value) {
-            case "Ordered":
-                crossingAlgorithm = new OrderedCrossover();
-                break;
-            default:
-                throw new Error("Selected incorrect crossing algorithm");
-        }
-
-        this.setState({ crossingAlgorithm }, this.updateSettings);
+        this.setState({ crossingAlgorithm: value }, this.updateSettings);
     };
 
     onMutationAlgorithmChange = (value: SelectValue) => {
-        let mutationAlgorithm: IMutation;
-
-        switch (value) {
-            case "Swap":
-                mutationAlgorithm = new SwapMutation();
-                break;
-            case "Inversion":
-                mutationAlgorithm = new InversionMutation();
-                break;
-            default:
-                throw new Error("Selected incorrect mutation algorithm");
-        }
-
-        this.setState({ mutationAlgorithm }, this.updateSettings);
+        this.setState({ mutationAlgorithm: value }, this.updateSettings);
     };
 
     onTourChange = (value: number) => {
@@ -126,7 +87,9 @@ export default class Sidebar extends React.Component<ISidebarProps> {
 
     render() {
         const { Option } = Select;
-        const { isWorking } = this.props;
+        const { isWorking, files } = this.props;
+
+        if (!files) return <b>Loading...</b>;
 
         return (
             <div className={styles.sidebar}>
@@ -135,9 +98,8 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                     <Select
                         className={styles.select}
                         onChange={this.onFilenameChange}
-                        defaultValue={this.state.filename}
                     >
-                        {this.props.filenamesList.map(filename => (
+                        {this.props.files.map(filename => (
                             <Option value={filename}>{filename}</Option>
                         ))}
                     </Select>
