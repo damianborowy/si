@@ -3,6 +3,7 @@ import styles from "./style.module.scss";
 import CanvasJSReact from "../../canvasjs/canvasjs.react";
 import DataPoints from "../../models/DataPoints";
 import {Button} from "antd";
+import {on} from "cluster";
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
@@ -12,6 +13,20 @@ interface IContentProps {
 }
 
 export default class Content extends React.Component<IContentProps> {
+    onClick = () => {
+        const {dataPoints} = this.props;
+        let csvContent = "data:text/csv;charset=utf-8,\n";
+
+        for (let i = 0; i < dataPoints.best.length; i++)
+            csvContent += i + "; " + dataPoints.best[i].y + "; " + dataPoints.worst[i].y + "; " + dataPoints.average[i].y + ";;;\n";
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `${this.props.currentChartFilename}.csv`);
+        link.click();
+    };
+
     render() {
         return (
             <div className={styles.content}>
@@ -48,8 +63,8 @@ export default class Content extends React.Component<IContentProps> {
                                 ]
                             }}
                         />
-                        <Button type="primary">
-                            Export to CSV
+                        <Button type="primary" onClick={this.onClick}>
+                            Eksportuj do CSV
                         </Button>
                     </div>
                 ) : (

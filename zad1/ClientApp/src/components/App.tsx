@@ -45,7 +45,7 @@ class App extends React.Component<{}, IAppState> {
             body: JSON.stringify(this.state.settings)
         }).then(res => res.json());
 
-        this.setState({isWorking: false, dataPoints});
+        this.setState({isWorking: false, dataPoints, currentChartFilename: this.state.settings.filename});
     };
 
     render() {

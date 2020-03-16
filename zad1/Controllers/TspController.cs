@@ -1,8 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using back.Models;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 
 namespace back.Controllers
 {
