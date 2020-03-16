@@ -68,6 +68,7 @@ namespace back.Models
                 dataPoints.AddPoints(population);
             }
 
+            Console.WriteLine(dataPoints.Best.Count);
             return dataPoints;
         }
 
@@ -161,8 +162,8 @@ namespace back.Models
 
                 var split = fileAsStrings[i].Split(separator, StringSplitOptions.RemoveEmptyEntries);
 
-                towns.Add(new Town(int.Parse(split[0]), float.Parse(split[1], CultureInfo.InvariantCulture),
-                    float.Parse(split[2], CultureInfo.InvariantCulture),
+                towns.Add(new Town(int.Parse(split[0]), double.Parse(split[1], CultureInfo.InvariantCulture),
+                    double.Parse(split[2], CultureInfo.InvariantCulture),
                     edgeWeightType));
             }
 

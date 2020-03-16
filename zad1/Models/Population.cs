@@ -24,17 +24,17 @@ namespace back.Models.Population
 
         protected abstract void Initialize();
 
-        public float CalculateBestDistance()
+        public double CalculateBestDistance()
         {
             return Individuals.Select(individual => individual.CalculateTotalDistance()).Min();
         }
 
-        public float CalculateAverageDistance()
+        public double CalculateAverageDistance()
         {
             return Individuals.Select(individual => individual.CalculateTotalDistance()).Average();
         }
 
-        public float CalculateWorstDistance()
+        public double CalculateWorstDistance()
         {
             return Individuals.Select(individual => individual.CalculateTotalDistance()).Max();
         }

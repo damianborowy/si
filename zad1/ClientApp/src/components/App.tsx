@@ -26,8 +26,6 @@ class App extends React.Component<{}, IAppState> {
             res.json()
         );
 
-        console.log(files);
-
         this.setState({files});
     }
 
@@ -47,7 +45,7 @@ class App extends React.Component<{}, IAppState> {
             body: JSON.stringify(this.state.settings)
         }).then(res => res.json());
 
-        this.setState({dataPoints, isWorking: false});
+        this.setState({isWorking: false, dataPoints});
     };
 
     render() {

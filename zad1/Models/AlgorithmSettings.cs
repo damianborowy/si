@@ -2,14 +2,14 @@
 {
     public class AlgorithmSettings
     {
-        public string Filename { get; }
-        public string SelectionAlgorithm { get; }
-        public string CrossingAlgorithm { get; }
-        public string MutationAlgorithm { get; }
-        public int Tour { get; }
-        public int PopulationSize { get; }
-        public int Generations { get; }
-        public double Px { get; }
-        public double Pm { get; }
+        public string Filename { get; set; }
+        public string SelectionAlgorithm { get; set; }
+        public string CrossingAlgorithm { get; set; }
+        public string MutationAlgorithm { get; set; }
+        public int Tour { get; set; }
+        public int PopulationSize { get; set; }
+        public int Generations { get; set; }
+        public double Px { get; set; }
+        public double Pm { get; set; }
     }
 }

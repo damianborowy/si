@@ -60,16 +60,16 @@ namespace back.Models
             return this;
         }
 
-        public float CalculateTotalDistance()
+        public double CalculateTotalDistance()
         {
-            float sum = 0;
+            double sum = 0;
 
             for (var i = 0; i < Towns.Count - 1; i++)
                 sum += Towns[i].CalculateDistance(Towns[i + 1]);
 
             sum += Towns[0].CalculateDistance(Towns[^1]);
 
-            return (float) Math.Round(sum, 2);
+            return Math.Round(sum, 2);
         }
 
         public object Clone()

@@ -33,8 +33,6 @@ namespace back.Controllers
         [HttpPost]
         public DataPoints CalculateDataPoints([FromBody] AlgorithmSettings settings)
         {
-            Console.WriteLine(JsonConvert.SerializeObject(settings));
-
             var tsp = TSP.FromFile(settings.Filename);
 
             return tsp.SolveTsp(settings);

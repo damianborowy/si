@@ -38,6 +38,8 @@
       <TypeScriptCompile Include="ClientApp\src\components\Content\index.tsx" />
       <TypeScriptCompile Include="ClientApp\src\components\Sidebar\index.tsx" />
       <TypeScriptCompile Include="ClientApp\src\index.tsx" />
+      <TypeScriptCompile Include="ClientApp\src\models\DataPoints.ts" />
+      <TypeScriptCompile Include="ClientApp\src\models\Point.ts" />
       <TypeScriptCompile Include="ClientApp\src\react-app-env.d.ts" />
     </ItemGroup>
 

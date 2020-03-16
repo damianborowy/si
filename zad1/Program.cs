@@ -15,11 +15,6 @@ namespace zad1
     {
         public static void Main(string[] args)
         {
-            var tsp = TSP.FromFile("berlin52");
-            var greedyPopulation = new GreedyPopulation(tsp);
-
-            Console.WriteLine("Best individual: " + greedyPopulation.CalculateBestDistance() + "km");
-
             CreateHostBuilder(args).Build().Run();
         }
 
