@@ -21,6 +21,8 @@ namespace zad1.Models
 
         private readonly Random _rng = new Random();
 
+        private static readonly int ITERATIONS_COUNT = 10;
+
         private TSP(string name, string type, string comment, int dimension, string edgeWeightType,
             string displayDataType, List<Town> towns)
         {
@@ -53,26 +55,43 @@ namespace zad1.Models
 
         public DataPoints SolveTsp(AlgorithmSettings settings)
         {
-            var dataPoints = new DataPoints();
-            var population = CreateStartingPopulation(settings);
-            dataPoints.AddPoints(population);
+            var dataPointsList = new List<DataPoints>();
 
-            for (var i = 1; i < settings.Generations; i++)
+            for (var iteration = 0; iteration < ITERATIONS_COUNT; iteration++)
             {
-                var selectedPopulation = Select(population, settings);
-                var crossedPopulation = Cross(selectedPopulation, settings);
-                var mutatedPopulation = Mutate(crossedPopulation, settings);
-
-                population = mutatedPopulation;
+                var population = CreateStartingPopulation(settings);
+                var dataPoints = new DataPoints();
                 dataPoints.AddPoints(population);
+
+                for (var generation = 1; generation < settings.Generations; generation++)
+                {
+                    var selectedPopulation = Select(population, settings);
+                    var crossedPopulation = Cross(selectedPopulation, settings);
+                    var mutatedPopulation = Mutate(crossedPopulation, settings);
+
+                    population = mutatedPopulation;
+                    dataPoints.AddPoints(population);
+                }
+
+                dataPointsList.Add(dataPoints);
             }
 
-            return dataPoints;
+            return CalculateAverageDataPoints(dataPointsList);
+        }
+
+        private static DataPoints CalculateAverageDataPoints(List<DataPoints> dataPointsList)
+        {
+            var bestValues = dataPointsList.Select(dataPoints => dataPoints.Best.Min()).ToList();
+
+            var bestDataPointsIndex =
+                dataPointsList.FindIndex(points => Math.Abs(points.Best[^1].Y - bestValues.Min().Y) < 0.1);
+
+            return dataPointsList[bestDataPointsIndex];
         }
 
         private Population CreateStartingPopulation(AlgorithmSettings settings)
         {
-            var greedyPopulationSize = (int) Math.Floor(settings.PopulationSize / 10.0);
+            var greedyPopulationSize = (int) Math.Floor(settings.PopulationSize / 15.0);
             var randomPopulationSize = settings.PopulationSize - greedyPopulationSize;
 
             var greedyPopulation = new GreedyPopulation(greedyPopulationSize, this);
