@@ -3,7 +3,6 @@ import styles from "./style.module.scss";
 import CanvasJSReact from "../../canvasjs/canvasjs.react";
 import DataPoints from "../../models/DataPoints";
 import {Button} from "antd";
-import {on} from "cluster";
 
 const CanvasJSChart = CanvasJSReact.CanvasJSChart;
 

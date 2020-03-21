@@ -27,7 +27,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
         filename: null,
         selectionAlgorithm: "Tournament",
         crossingAlgorithm: "Ordered",
-        mutationAlgorithm: "Swap",
+        mutationAlgorithm: "Inversion",
         tour: 5,
         populationSize: 100,
         generations: 1000,
@@ -129,8 +129,8 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                         onChange={this.onMutationAlgorithmChange}
                         defaultValue={this.state.mutationAlgorithm}
                     >
-                        <Option value="Swap">Swap</Option>
                         <Option value="Inversion">Inversion</Option>
+                        <Option value="Swap">Swap</Option>
                     </Select>
                 </div>
                 <div>

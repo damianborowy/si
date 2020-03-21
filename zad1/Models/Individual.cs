@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace back.Models
+namespace zad1.Models
 {
-    public class Individual : ICloneable
+    public class Individual : ICloneable, IComparable
     {
-        public List<Town> Towns { get; private set; }
+        public List<Town> Towns { get; set; }
+
+        private double? TotalDistance { get; set; }
 
         public Individual(IEnumerable<Town> towns)
         {
@@ -62,19 +64,28 @@ namespace back.Models
 
         public double CalculateTotalDistance()
         {
-            double sum = 0;
+            if (TotalDistance.HasValue) return TotalDistance.Value;
+
+            var sum = Towns[0].CalculateDistance(Towns[^1]);
 
             for (var i = 0; i < Towns.Count - 1; i++)
                 sum += Towns[i].CalculateDistance(Towns[i + 1]);
 
-            sum += Towns[0].CalculateDistance(Towns[^1]);
+            TotalDistance = Math.Round(sum, 2);
 
-            return Math.Round(sum, 2);
+            return TotalDistance.Value;
         }
 
         public object Clone()
         {
             return MemberwiseClone();
+        }
+
+        public int CompareTo(object? obj)
+        {
+            if (obj is Individual otherIndividual)
+                return CalculateTotalDistance().CompareTo(otherIndividual.CalculateTotalDistance());
+            return 1;
         }
     }
 }

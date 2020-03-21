@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace back.Models
+namespace zad1.Models
 {
     public class DataPoints
     {
@@ -15,7 +15,7 @@ namespace back.Models
             Average = new List<Point>();
         }
 
-        public void AddPoints(Population.Population population)
+        public void AddPoints(Population population)
         {
             Best.Add(new Point(Best.Count, population.CalculateBestDistance()));
             Worst.Add(new Point(Worst.Count, population.CalculateWorstDistance()));

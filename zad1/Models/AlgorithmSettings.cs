@@ -1,4 +1,4 @@
-﻿namespace back.Models
+﻿namespace zad1.Models
 {
     public class AlgorithmSettings
     {

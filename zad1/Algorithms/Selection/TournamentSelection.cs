@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using back.Models;
-using back.Models.Population;
+using zad1.Models;
 
 namespace zad1.Algorithms.Selection
 {
     public class TournamentSelection : ISelection
     {
-        public int N { get; }
+        private int N { get; }
 
         public TournamentSelection(int n)
         {

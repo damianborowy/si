@@ -1,5 +1,5 @@
 ﻿using System;
-using back.Models;
+using zad1.Models;
 
 namespace zad1.Algorithms.Mutation
 {
@@ -9,13 +9,13 @@ namespace zad1.Algorithms.Mutation
         {
             var rng = new Random();
 
-            var firstindex = rng.Next(individual.Towns.Count);
+            var firstIndex = rng.Next(individual.Towns.Count);
             var secondIndex = rng.Next(individual.Towns.Count);
 
             var clone = (Individual) individual.Clone();
 
-            var temp = clone.Towns[firstindex];
-            clone.Towns[firstindex] = clone.Towns[secondIndex];
+            var temp = clone.Towns[firstIndex];
+            clone.Towns[firstIndex] = clone.Towns[secondIndex];
             clone.Towns[secondIndex] = temp;
 
             return clone;

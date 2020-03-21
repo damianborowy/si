@@ -1,5 +1,4 @@
-﻿using back.Models;
-using back.Models.Population;
+﻿using zad1.Models;
 
 namespace zad1.Algorithms.Selection
 {

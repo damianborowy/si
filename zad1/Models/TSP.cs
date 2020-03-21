@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using back.Models.Population;
 using zad1.Algorithms.Crossing;
 using zad1.Algorithms.Mutation;
 using zad1.Algorithms.Selection;
 
-namespace back.Models
+namespace zad1.Models
 {
     public class TSP
     {
@@ -55,7 +54,7 @@ namespace back.Models
         public DataPoints SolveTsp(AlgorithmSettings settings)
         {
             var dataPoints = new DataPoints();
-            Population.Population population = new RandomPopulation(settings.PopulationSize, this);
+            var population = CreateStartingPopulation(settings);
             dataPoints.AddPoints(population);
 
             for (var i = 1; i < settings.Generations; i++)
@@ -68,11 +67,23 @@ namespace back.Models
                 dataPoints.AddPoints(population);
             }
 
-            Console.WriteLine(dataPoints.Best.Count);
             return dataPoints;
         }
 
-        private GeneticPopulation Select(Population.Population population, AlgorithmSettings settings)
+        private Population CreateStartingPopulation(AlgorithmSettings settings)
+        {
+            var greedyPopulationSize = (int) Math.Floor(settings.PopulationSize / 10.0);
+            var randomPopulationSize = settings.PopulationSize - greedyPopulationSize;
+
+            var greedyPopulation = new GreedyPopulation(greedyPopulationSize, this);
+            var randomPopulation = new RandomPopulation(randomPopulationSize, this);
+
+            randomPopulation.Individuals.AddRange(greedyPopulation.Individuals);
+
+            return randomPopulation;
+        }
+
+        private GeneticPopulation Select(Population population, AlgorithmSettings settings)
         {
             var selectionAlgorithm = ParseSelectionAlgorithm(settings);
 
@@ -83,7 +94,7 @@ namespace back.Models
             };
         }
 
-        private GeneticPopulation Cross(Population.Population selectedPopulation, AlgorithmSettings settings)
+        private GeneticPopulation Cross(Population selectedPopulation, AlgorithmSettings settings)
         {
             var crossingAlgorithm = ParseCrossingAlgorithm(settings);
             double randomDouble;
@@ -106,7 +117,7 @@ namespace back.Models
             };
         }
 
-        private GeneticPopulation Mutate(Population.Population crossedPopulation, AlgorithmSettings settings)
+        private GeneticPopulation Mutate(Population crossedPopulation, AlgorithmSettings settings)
         {
             var mutationAlgorithm = ParseMutationAlgorithm(settings);
             double randomDouble;
@@ -124,32 +135,30 @@ namespace back.Models
             };
         }
 
-        private ISelection ParseSelectionAlgorithm(AlgorithmSettings settings)
-        {
-            return settings.SelectionAlgorithm switch
+        private static ISelection ParseSelectionAlgorithm(AlgorithmSettings settings) =>
+            settings.SelectionAlgorithm switch
             {
                 "Tournament" => new TournamentSelection(settings.Tour),
+                "Roulette" => new RouletteSelection(),
                 _ => throw new Exception("Incorrect selection algorithm name")
             };
-        }
 
-        private ICrossing ParseCrossingAlgorithm(AlgorithmSettings settings)
-        {
-            return settings.CrossingAlgorithm switch
+        private static ICrossing ParseCrossingAlgorithm(AlgorithmSettings settings) =>
+            settings.CrossingAlgorithm switch
             {
                 "Ordered" => new OrderedCrossover(),
+                "PartiallyMatched" => new PartiallyMatchedCrossover(),
+                "Cycle" => new CycleCrossover(),
                 _ => throw new Exception("Incorrect crossing algorithm name")
             };
-        }
 
-        private IMutation ParseMutationAlgorithm(AlgorithmSettings settings)
-        {
-            return settings.MutationAlgorithm switch
+        private static IMutation ParseMutationAlgorithm(AlgorithmSettings settings) =>
+            settings.MutationAlgorithm switch
             {
                 "Swap" => new SwapMutation(),
+                "Inversion" => new InversionMutation(),
                 _ => throw new Exception("Incorrect mutation algorithm name")
             };
-        }
 
         private static List<Town> CreateTowns(IReadOnlyList<string> fileAsStrings, string edgeWeightType)
         {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace back.Models.Population
+namespace zad1.Models
 {
     public class GreedyPopulation : Population
     {
@@ -17,7 +17,8 @@ namespace back.Models.Population
         protected override void Initialize()
         {
             var rng = new Random();
-            var randomIndicesList = new List<int>(Size).Select(individual => rng.Next(Size)).ToList();
+            var randomIndicesList = Enumerable.Repeat(0, Size).Select(index => rng.Next(Individuals[0].Towns.Count))
+                .ToList();
 
             Individuals = Individuals.AsParallel()
                 .Select((individual, i) => individual.MakeGreedy(individual.Towns[randomIndicesList[i]])).ToList();

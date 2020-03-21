@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace back.Models
+namespace zad1.Models
 {
     public class Town
     {

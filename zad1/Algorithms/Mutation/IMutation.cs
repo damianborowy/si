@@ -1,4 +1,4 @@
-﻿using back.Models;
+﻿using zad1.Models;
 
 namespace zad1.Algorithms.Mutation
 {

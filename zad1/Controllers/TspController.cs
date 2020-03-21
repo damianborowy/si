@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using back.Models;
 using Microsoft.AspNetCore.Mvc;
+using zad1.Models;
 
-namespace back.Controllers
+namespace zad1.Controllers
 {
     [ApiController]
     [Route("[controller]")]

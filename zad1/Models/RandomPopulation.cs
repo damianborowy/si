@@ -1,4 +1,4 @@
-﻿namespace back.Models.Population
+﻿namespace zad1.Models
 {
     public class RandomPopulation : Population
     {

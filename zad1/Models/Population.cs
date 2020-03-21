@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace back.Models.Population
+namespace zad1.Models
 {
     public abstract class Population
     {
