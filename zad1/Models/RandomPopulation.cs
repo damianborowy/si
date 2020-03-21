@@ -1,4 +1,6 @@
-﻿namespace zad1.Models
+﻿using System.Linq;
+
+namespace zad1.Models
 {
     public class RandomPopulation : Population
     {
@@ -8,7 +10,7 @@
 
         protected override void Initialize()
         {
-            Individuals.ForEach(individual => individual.Shuffle());
+            Individuals = Individuals.Select(individual => individual.Shuffle()).ToList();
         }
     }
 }
