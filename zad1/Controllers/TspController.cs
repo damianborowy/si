@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using zad1.Models;
 
@@ -31,9 +33,15 @@ namespace zad1.Controllers
         [HttpPost]
         public DataPoints CalculateDataPoints([FromBody] AlgorithmSettings settings)
         {
+            var stopwatch = new Stopwatch();
             var tsp = TSP.FromFile(settings.Filename);
 
-            return tsp.SolveTsp(settings);
+            stopwatch.Start();
+            var result = tsp.SolveTsp(settings);
+            stopwatch.Stop();
+            Console.WriteLine("Elapsed time is {0} s", stopwatch.ElapsedMilliseconds / 1000.0);
+
+            return result;
         }
     }
 }

@@ -14,10 +14,14 @@ interface IContentProps {
 export default class Content extends React.Component<IContentProps> {
     onClick = () => {
         const {dataPoints} = this.props;
-        let csvContent = "data:text/csv;charset=utf-8,\n";
+        let csvContent = "data:text/csv;charset=utf-8,\n" +
+            "Index; Best; Worst; Average\n";
 
         for (let i = 0; i < dataPoints.best.length; i++)
-            csvContent += i + "; " + dataPoints.best[i].y + "; " + dataPoints.worst[i].y + "; " + dataPoints.average[i].y + ";;;\n";
+            csvContent += i + "; " +
+                dataPoints.best[i].y.toString().replace(".", ",") + "; " +
+                dataPoints.worst[i].y.toString().replace(".", ",") + "; " +
+                dataPoints.average[i].y.toString().replace(".", ",") + "\n";
 
         const encodedUri = encodeURI(csvContent);
         const link = document.createElement("a");

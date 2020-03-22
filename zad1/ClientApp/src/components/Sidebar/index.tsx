@@ -24,15 +24,15 @@ export interface ISidebarState {
 
 export default class Sidebar extends React.Component<ISidebarProps> {
     state: Readonly<ISidebarState> = {
-        filename: null,
+        filename: "kroA100",
         selectionAlgorithm: "Tournament",
         crossingAlgorithm: "Ordered",
         mutationAlgorithm: "Inversion",
         tour: 5,
-        populationSize: 100,
+        populationSize: 250,
         generations: 1000,
-        Px: 0.75,
-        Pm: 0.15
+        Px: 0.5,
+        Pm: 0.3
     };
 
     componentDidMount() {
@@ -92,6 +92,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                     <Select
                         className={styles.select}
                         onChange={this.onFilenameChange}
+                        defaultValue={this.state.filename}
                     >
                         {this.props.files.map(filename => (
                             <Option value={filename}>{filename}</Option>
@@ -139,7 +140,7 @@ export default class Sidebar extends React.Component<ISidebarProps> {
                     <InputNumber
                         className={styles.input}
                         min={0}
-                        max={50}
+                        max={2500}
                         defaultValue={this.state.tour}
                         onChange={this.onTourChange}
                     />

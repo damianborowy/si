@@ -21,7 +21,11 @@ namespace zad1.Algorithms.Selection
             {
                 sum += 1 / Math.Pow(individual.CalculateTotalDistance(), 10);
 
-                if (sum >= random) result = individual;
+                if (sum >= random)
+                {
+                    result = individual;
+                    break;
+                }
             }
 
             if (result is null) throw new Exception("Roulette selection algorithm couldn't find the proper individual");

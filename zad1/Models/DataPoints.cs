@@ -6,7 +6,7 @@ namespace zad1.Models
     {
         public List<Point> Best { get; }
         public List<Point> Worst { get; }
-        public List<Point> Average { get; }
+        public List<Point> Average { get; set; }
 
         public DataPoints()
         {

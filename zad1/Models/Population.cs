@@ -7,7 +7,7 @@ namespace zad1.Models
     {
         public List<Individual> Individuals { get; set; }
         protected int Size { get; }
-        private TSP Tsp { get; }
+        protected TSP Tsp { get; }
 
         protected Population(int size, TSP tsp)
         {

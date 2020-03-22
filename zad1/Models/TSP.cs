@@ -21,7 +21,8 @@ namespace zad1.Models
 
         private readonly Random _rng = new Random();
 
-        private static readonly int ITERATIONS_COUNT = 10;
+        private const int IterationsCount = 10;
+        private const double GreedyFraction = 0.15;
 
         private TSP(string name, string type, string comment, int dimension, string edgeWeightType,
             string displayDataType, List<Town> towns)
@@ -57,7 +58,7 @@ namespace zad1.Models
         {
             var dataPointsList = new List<DataPoints>();
 
-            for (var iteration = 0; iteration < ITERATIONS_COUNT; iteration++)
+            for (var iteration = 0; iteration < IterationsCount; iteration++)
             {
                 var population = CreateStartingPopulation(settings);
                 var dataPoints = new DataPoints();
@@ -82,16 +83,24 @@ namespace zad1.Models
         private static DataPoints CalculateAverageDataPoints(List<DataPoints> dataPointsList)
         {
             var bestValues = dataPointsList.Select(dataPoints => dataPoints.Best.Min()).ToList();
-
             var bestDataPointsIndex =
                 dataPointsList.FindIndex(points => Math.Abs(points.Best[^1].Y - bestValues.Min().Y) < 0.1);
 
-            return dataPointsList[bestDataPointsIndex];
+            var resultDataPoints = dataPointsList[bestDataPointsIndex];
+            resultDataPoints.Average =
+                Enumerable.Range(0, resultDataPoints.Average.Count).Select(index => new Point(index, 0)).ToList();
+
+            foreach (var best in dataPointsList.SelectMany(dataPoints => dataPoints.Best))
+            {
+                resultDataPoints.Average[Convert.ToInt32(best.X)].Y += best.Y / dataPointsList.Count;
+            }
+
+            return resultDataPoints;
         }
 
         private Population CreateStartingPopulation(AlgorithmSettings settings)
         {
-            var greedyPopulationSize = (int) Math.Floor(settings.PopulationSize / 15.0);
+            var greedyPopulationSize = (int) Math.Floor(settings.PopulationSize * GreedyFraction);
             var randomPopulationSize = settings.PopulationSize - greedyPopulationSize;
 
             var greedyPopulation = new GreedyPopulation(greedyPopulationSize, this);
