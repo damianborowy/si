@@ -74,8 +74,9 @@
         </e>
       </e>
       <e p="Controllers" t="Include">
-        <e p="WeatherForecastController.cs" t="Include" />
+        <e p="SudokuController.cs" t="Include" />
       </e>
+      <e p="Models" t="Include" />
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">
           <e p="netcoreapp3.1" t="Include">
@@ -95,7 +96,6 @@
         <e p="launchSettings.json" t="Include" />
       </e>
       <e p="Startup.cs" t="Include" />
-      <e p="WeatherForecast.cs" t="Include" />
       <e p="zad2.csproj" t="IncludeRecursive" />
       <e p="zad2.sln" t="IncludeFlat" />
     </e>
