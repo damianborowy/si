@@ -10,6 +10,7 @@
       <e p="bin" t="ExcludeRecursive" />
       <e p="ClientApp" t="Include">
         <e p=".gitignore" t="Include" />
+        <e p="node_modules\@ant-design\react-slick" t="IncludeRecursive" />
         <e p="node_modules\@babel\parser" t="IncludeRecursive" />
         <e p="node_modules\@babel\types" t="IncludeRecursive" />
         <e p="node_modules\@jest\console" t="IncludeRecursive" />
@@ -17,27 +18,46 @@
         <e p="node_modules\@jest\source-map" t="IncludeRecursive" />
         <e p="node_modules\@jest\test-result" t="IncludeRecursive" />
         <e p="node_modules\@jest\types" t="IncludeRecursive" />
+        <e p="node_modules\@mrmlnc\readdir-enhanced" t="IncludeRecursive" />
+        <e p="node_modules\@nodelib\fs.stat" t="IncludeRecursive" />
         <e p="node_modules\@types" t="IncludeRecursive">
           <e p="babel__generator" t="IncludeRecursive" />
           <e p="babel__template" t="IncludeRecursive" />
           <e p="babel__traverse" t="IncludeRecursive" />
+          <e p="events" t="IncludeRecursive" />
           <e p="istanbul-lib-coverage" t="IncludeRecursive" />
           <e p="istanbul-lib-report" t="IncludeRecursive" />
+          <e p="minimatch" t="IncludeRecursive" />
+          <e p="node" t="IncludeRecursive" />
+          <e p="prop-types" t="IncludeRecursive" />
+          <e p="react" t="IncludeRecursive" />
+          <e p="yargs-parser" t="IncludeRecursive" />
         </e>
+        <e p="node_modules\@typescript-eslint\experimental-utils" t="IncludeRecursive" />
+        <e p="node_modules\@typescript-eslint\parser" t="IncludeRecursive" />
+        <e p="node_modules\@typescript-eslint\typescript-estree" t="IncludeRecursive" />
         <e p="node_modules\ajv" t="IncludeRecursive" />
-        <e p="node_modules\babel-eslint" t="IncludeRecursive" />
+        <e p="node_modules\antd" t="IncludeRecursive" />
         <e p="node_modules\babel-jest" t="IncludeRecursive" />
         <e p="node_modules\bootstrap" t="IncludeRecursive" />
         <e p="node_modules\chalk" t="IncludeRecursive" />
+        <e p="node_modules\chokidar" t="IncludeRecursive" />
+        <e p="node_modules\compute-scroll-into-view" t="IncludeRecursive" />
+        <e p="node_modules\copy-to-clipboard" t="IncludeRecursive" />
         <e p="node_modules\cross-env" t="IncludeRecursive" />
+        <e p="node_modules\csstype" t="IncludeRecursive" />
+        <e p="node_modules\dotenv" t="IncludeRecursive" />
         <e p="node_modules\dotenv-expand" t="IncludeRecursive" />
-        <e p="node_modules\eslint" t="IncludeRecursive" />
         <e p="node_modules\eslint-config-react-app" t="IncludeRecursive" />
         <e p="node_modules\eslint-plugin-flowtype" t="IncludeRecursive" />
         <e p="node_modules\eslint-plugin-import" t="IncludeRecursive" />
         <e p="node_modules\eslint-plugin-jsx-a11y" t="IncludeRecursive" />
         <e p="node_modules\eslint-plugin-react" t="IncludeRecursive" />
         <e p="node_modules\fast-deep-equal" t="IncludeRecursive" />
+        <e p="node_modules\fast-glob" t="IncludeRecursive" />
+        <e p="node_modules\fast-json-stable-stringify" t="IncludeRecursive" />
+        <e p="node_modules\hoist-non-react-statics" t="IncludeRecursive" />
+        <e p="node_modules\html-webpack-plugin" t="IncludeRecursive" />
         <e p="node_modules\jest" t="IncludeRecursive" />
         <e p="node_modules\jest-haste-map" t="IncludeRecursive" />
         <e p="node_modules\jest-message-util" t="IncludeRecursive" />
@@ -48,7 +68,14 @@
         <e p="node_modules\jest-worker" t="IncludeRecursive" />
         <e p="node_modules\jquery" t="IncludeRecursive" />
         <e p="node_modules\merge" t="IncludeRecursive" />
+        <e p="node_modules\moment" t="IncludeRecursive" />
         <e p="node_modules\oidc-client" t="IncludeRecursive" />
+        <e p="node_modules\omit.js" t="IncludeRecursive" />
+        <e p="node_modules\pretty-error" t="IncludeRecursive" />
+        <e p="node_modules\rc-checkbox" t="IncludeRecursive" />
+        <e p="node_modules\rc-dialog" t="IncludeRecursive" />
+        <e p="node_modules\rc-pagination" t="IncludeRecursive" />
+        <e p="node_modules\rc-progress" t="IncludeRecursive" />
         <e p="node_modules\react" t="IncludeRecursive" />
         <e p="node_modules\react-dom" t="IncludeRecursive" />
         <e p="node_modules\react-router-bootstrap" t="IncludeRecursive" />
@@ -56,11 +83,13 @@
         <e p="node_modules\react-scripts" t="IncludeRecursive" />
         <e p="node_modules\reactstrap" t="IncludeRecursive" />
         <e p="node_modules\realpath-native" t="IncludeRecursive" />
+        <e p="node_modules\resize-observer-polyfill" t="IncludeRecursive" />
         <e p="node_modules\rimraf" t="IncludeRecursive" />
+        <e p="node_modules\scroll-into-view-if-needed" t="IncludeRecursive" />
         <e p="node_modules\source-map" t="IncludeRecursive" />
+        <e p="node_modules\upath" t="IncludeRecursive" />
         <e p="node_modules\uri-js" t="IncludeRecursive" />
         <e p="node_modules\worker-farm" t="IncludeRecursive" />
-        <e p="package-lock.json" t="Include" />
         <e p="package.json" t="Include" />
         <e p="public" t="Include">
           <e p="favicon.ico" t="Include" />
@@ -69,14 +98,18 @@
         <e p="README.md" t="Include" />
         <e p="src" t="Include">
           <e p="App.jsx" t="Include" />
-          <e p="components" t="Include" />
+          <e p="App.module.css" t="Include" />
           <e p="index.js" t="Include" />
         </e>
       </e>
       <e p="Controllers" t="Include">
         <e p="SudokuController.cs" t="Include" />
       </e>
-      <e p="Models" t="Include" />
+      <e p="Models" t="Include">
+        <e p="CSP.cs" t="Include" />
+        <e p="Sudoku.cs" t="Include" />
+        <e p="SudokuResult.cs" t="Include" />
+      </e>
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">
           <e p="netcoreapp3.1" t="Include">
@@ -96,6 +129,7 @@
         <e p="launchSettings.json" t="Include" />
       </e>
       <e p="Startup.cs" t="Include" />
+      <e p="Sudoku.csv" t="Include" />
       <e p="zad2.csproj" t="IncludeRecursive" />
       <e p="zad2.sln" t="IncludeFlat" />
     </e>

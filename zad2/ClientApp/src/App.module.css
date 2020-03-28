@@ -1,0 +1,59 @@
+﻿.content {
+    display: grid;
+    grid-template-columns: 150px 1fr 500px;
+    grid-template-rows: 1fr;
+}
+
+.sidebar {
+    margin: 20px;
+    font-size: 18px;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(9, 75px);
+    grid-template-rows: repeat(9, 75px);
+    justify-content: center;
+    align-content: center;
+    grid-gap: 0;
+    list-style: none;
+    margin: 55px 0 2vw;
+    padding: 0;
+    font-size: 30px
+}
+
+.cell {
+    width: 75px;
+    height: 75px;
+    border: 1px solid black;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cell:nth-child(n):nth-child(-n+9) {
+    border-top-width: 3px;
+}
+
+.cell:nth-child(n+73):nth-child(-n+81) {
+    border-bottom-width: 3px;
+}
+
+.cell:nth-child(3n) {
+    border-right-width: 3px;
+}
+
+.cell:nth-child(9n+1) {
+    border-left-width: 3px;
+}
+
+.cell:nth-child(n+19):nth-child(-n+27) {
+    border-bottom-width: 3px;
+}
+
+.cell:nth-child(n+46):nth-child(-n+54) {
+    border-bottom-width: 3px;
+}
