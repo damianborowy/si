@@ -16,12 +16,28 @@ export default class App extends Component {
         this.setState({selectedFile})
     };
 
-    onClick = async () => {
+    onStartClick = async () => {
         this.setState({loading: true});
 
         const res = await fetch(`/sudoku/${this.state.selectedFile}`).then(res => res.json());
 
         this.setState({loading: false, res})
+    };
+
+    onExportClick = () => {
+        const {res} = this.state;
+
+        let csvContent = "data:text/csv;charset=utf-8," +
+            "Ilosc rozwiazan;Pierwsze wezly;Pierwszy czas;Pierwszy nawroty;Wezly;Czas;Nawroty;Rozwiazane krzyzowki\n" +
+            `${res.solutionsCount};${res.firstNodesVisitedCount};${res.firstSolutionTime};${res.firstRecurrencesCount};${res.totalNodesVisitedCount};${res.totalExecutionTime};${res.totalRecurrencesCount};${res.boards[0]}\n`;
+
+        for (let i = 1; i < res.boards.length; i++) csvContent += `;;;;;;;${res.boards[i]}\n`;
+
+        const encodedUri = encodeURI(csvContent);
+        const link = document.createElement("a");
+        link.setAttribute("href", encodedUri);
+        link.setAttribute("download", `${this.state.selectedFile}.csv`);
+        link.click();
     };
 
     render() {
@@ -65,12 +81,14 @@ export default class App extends Component {
                             </Option>
                         </Select><br/>
                     </div>
+                    {/*<div>*/}
+                    {/*    <b>Powtórzenia:</b>*/}
+                    {/*    <InputNumber style={{marginLeft: 65}} className={styles.select} defaultValue={1} min={1}/><br/>*/}
+                    {/*</div>*/}
                     <div>
-                        <b>Powtórzenia:</b>
-                        <InputNumber style={{marginLeft: 65}} className={styles.select} defaultValue={1} min={1}/><br/>
-                    </div>
-                    <div>
-                        <Button type="primary" onClick={this.onClick} loading={this.state.loading} block>Start</Button>
+                        <Button type="primary" onClick={this.onStartClick} loading={this.state.loading} block>
+                            Start
+                        </Button>
                     </div>
                 </div>
                 <div className={styles.grid}>
@@ -92,6 +110,9 @@ export default class App extends Component {
                             <b>Liczba nawrotów:</b> {this.state.res.totalRecurrencesCount} <br/><br/>
 
                             <div><b>Ilość rozwiązań:</b> {this.state.res.solutionsCount}</div>
+                            <Button type="primary" onClick={this.onExportClick} style={{float: "right"}}>
+                                Eksportuj do CSV
+                            </Button>
                         </div>
                         : ""}
                 </div>
