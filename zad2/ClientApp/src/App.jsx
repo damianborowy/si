@@ -92,9 +92,10 @@ export default class App extends Component {
                     </div>
                 </div>
                 <div className={styles.grid}>
-                    {this.state.res ? this.state.res.boards[0].map((elem, i) => <div className={styles.cell} key={i}>
-                        {elem !== 0 ? elem : ""}
-                    </div>) : ""}
+                    {this.state.res && this.state.res.boards[0] ? this.state.res.boards[0].map((elem, i) =>
+                        <div className={styles.cell} key={i}>
+                            {elem !== 0 ? elem : ""}
+                        </div>) : ""}
                 </div>
                 <div className={styles.sidebar}>
                     {this.state.res ?

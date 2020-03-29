@@ -40,8 +40,8 @@ namespace zad2.Models
 
             head.HasAllChildren = true;
             var current = head;
-            Result.TotalRecurrencesCount++;
-            Result.TotalNodesVisitedCount++;
+            // Result.TotalRecurrencesCount++;
+            // Result.TotalNodesVisitedCount++;
 
             while (true)
             {
@@ -88,7 +88,7 @@ namespace zad2.Models
                     }
 
                     Result.TotalRecurrencesCount++;
-                    Result.TotalNodesVisitedCount++;
+                    // Result.TotalNodesVisitedCount++;
                     current = current.Parent;
                     current.Children.RemoveAt(0);
                 }
@@ -97,7 +97,7 @@ namespace zad2.Models
                     if (current.Children.Count == 0)
                     {
                         Result.TotalRecurrencesCount++;
-                        Result.TotalNodesVisitedCount++;
+                        // Result.TotalNodesVisitedCount++;
                         current = current.Parent;
                         current.Children.RemoveAt(0);
                     }
@@ -111,7 +111,10 @@ namespace zad2.Models
 
                     Result.SolutionsCount = Solutions.Count;
                     Result.TotalExecutionTime = timer.ElapsedMilliseconds;
-                    Result.Boards = Solutions.Select(sudoku => sudoku.Board.Cast<Field>().Select(elem => elem.Value));
+
+                    Result.Boards = Solutions.Count > 0
+                        ? Solutions.Select(sudoku => sudoku.Board.Cast<Field>().Select(elem => elem.Value))
+                        : new[] {FirstSudoku.Board.Cast<Field>().Select(elem => elem.Value)};
 
                     return Result;
                 }
