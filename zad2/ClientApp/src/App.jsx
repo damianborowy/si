@@ -28,7 +28,7 @@ export default class App extends Component {
         const {res} = this.state;
 
         let csvContent = "data:text/csv;charset=utf-8," +
-            "Ilosc rozwiazan;Pierwsze wezly;Pierwszy czas;Pierwszy nawroty;Wezly;Czas;Nawroty;Rozwiazane krzyzowki\n" +
+            "Ilosc rozwiazan;Pierwsze wezly;Pierwszy czas;Pierwszy nawroty;Wezly;Czas;Nawroty;Rozwiazane sudoku\n" +
             `${res.solutionsCount};${res.firstNodesVisitedCount};${res.firstSolutionTime};${res.firstRecurrencesCount};${res.totalNodesVisitedCount};${res.totalExecutionTime};${res.totalRecurrencesCount};${res.boards[0]}\n`;
 
         for (let i = 1; i < res.boards.length; i++) csvContent += `;;;;;;;${res.boards[i]}\n`;
