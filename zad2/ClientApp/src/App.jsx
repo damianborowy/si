@@ -81,20 +81,15 @@ export default class App extends Component {
                 <div className={styles.sidebar}>
                     {this.state.res ?
                         <div>
-                            <div><b>Liczba odwiedzonych węzłów drzewa do znalezienia pierwszego
-                                rozwiązania:</b> {this.state.res.firstNodesVisitedCount}<br/></div>
-                            <div><b>Czas do znalezienia pierwszego
-                                rozwiązania:</b> {this.state.res.firstSolutionTime}ms<br/>
-                            </div>
-                            <div><b>Liczba nawrotów wykonanych do znalezienia pierwszego
-                                rozwiązania:</b> {this.state.res.firstRecurrencesCount}<br/><br/></div>
+                            <h3>Pierwsze rozwiązanie</h3>
+                            <b>Liczba odwiedzonych węzłów drzewa:</b> {this.state.res.firstNodesVisitedCount}<br/>
+                            <b>Czas do znalezienia rozwiązania:</b> {this.state.res.firstSolutionTime}ms<br/>
+                            <b>Liczba nawrotów:</b> {this.state.res.firstRecurrencesCount}<br/><br/>
 
-                            <div><b>Całkowita liczba odwiedzonych węzłów
-                                drzewa:</b> {this.state.res.totalNodesVisitedCount}<br/></div>
-                            <div><b>Całkowity czas działania metody:</b> {this.state.res.totalExecutionTime}ms <br/>
-                            </div>
-                            <div><b>Całkowita liczba nawrotów:</b> {this.state.res.totalRecurrencesCount} <br/><br/>
-                            </div>
+                            <h3>Cały przebieg</h3>
+                            <b>Liczba odwiedzonych węzłów drzewa:</b> {this.state.res.totalNodesVisitedCount}<br/>
+                            <b>Czas działania metody:</b> {this.state.res.totalExecutionTime}ms <br/>
+                            <b>Liczba nawrotów:</b> {this.state.res.totalRecurrencesCount} <br/><br/>
 
                             <div><b>Ilość rozwiązań:</b> {this.state.res.solutionsCount}</div>
                         </div>
