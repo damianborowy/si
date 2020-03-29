@@ -90,6 +90,7 @@
         <e p="node_modules\upath" t="IncludeRecursive" />
         <e p="node_modules\uri-js" t="IncludeRecursive" />
         <e p="node_modules\worker-farm" t="IncludeRecursive" />
+        <e p="package-lock.json" t="Include" />
         <e p="package.json" t="Include" />
         <e p="public" t="Include">
           <e p="favicon.ico" t="Include" />
@@ -107,8 +108,11 @@
       </e>
       <e p="Models" t="Include">
         <e p="CSP.cs" t="Include" />
+        <e p="Field.cs" t="Include" />
+        <e p="Node.cs" t="Include" />
         <e p="Sudoku.cs" t="Include" />
         <e p="SudokuResult.cs" t="Include" />
+        <e p="SudokuSolver.cs" t="Include" />
       </e>
       <e p="obj" t="ExcludeRecursive">
         <e p="Debug" t="Include">

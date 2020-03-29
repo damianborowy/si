@@ -4,15 +4,19 @@ namespace zad2.Models
 {
     public class SudokuResult
     {
-        public IEnumerable<int> Board { get; set; }
-        public double TotalExecutionTime { get; set; }
+        public IEnumerable<IEnumerable<int>> Boards { get; set; }
+        public long FirstSolutionTime { get; set; }
+        public long FirstNodesVisitedCount { get; set; }
+        public long FirstRecurrencesCount { get; set; }
+        public long TotalExecutionTime { get; set; }
+        public long TotalRecurrencesCount { get; set; }
+        public long TotalNodesVisitedCount { get; set; }
         public int SolutionsCount { get; set; }
 
-        public SudokuResult(int solutionsCount, double totalExecutionTime, IEnumerable<int> board)
+        public SudokuResult()
         {
-            SolutionsCount = solutionsCount;
-            TotalExecutionTime = totalExecutionTime;
-            Board = board;
+            TotalRecurrencesCount = 0;
+            TotalNodesVisitedCount = 0;
         }
     }
 }

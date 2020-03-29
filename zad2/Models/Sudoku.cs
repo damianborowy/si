@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -6,100 +7,92 @@ namespace zad2.Models
 {
     public class Sudoku
     {
-        public int[,] Board { get; }
+        public Field[,] Board { get; set; }
 
-        private const int BoardSize = 9;
-
-        public Sudoku(string boardAsString)
+        public Sudoku(int[,] grid)
         {
-            Board = new int[BoardSize, BoardSize];
-            var splitBoard = boardAsString.Split(";");
-            var boardValues = splitBoard[2];
+            Board = new Field[9, 9];
 
-            var counter = 0;
-            for (var i = 0; i < BoardSize; i++)
-            {
-                for (var j = 0; j < BoardSize; j++)
-                {
-                    Board[i, j] = (int) char.GetNumericValue(boardValues[counter]);
+            for (var i = 0; i < 9; i++)
+            for (var j = 0; j < 9; j++)
+                Board[i, j] = new Field {Value = grid[i, j]};
 
-                    if (Board[i, j] == -1) Board[i, j] = 0;
-
-                    counter++;
-                }
-            }
+            CalculateAllPossibilities();
         }
 
-        public bool Solve()
+        public void CalculateAllPossibilities()
         {
-            var row = -1;
-            var col = -1;
-            var isEmpty = true;
-            for (var i = 0; i < BoardSize; i++)
-            {
-                for (var j = 0; j < BoardSize; j++)
-                {
-                    if (Board[i, j] != 0) continue;
-
-                    row = i;
-                    col = j;
-
-                    isEmpty = false;
-                    break;
-                }
-
-                if (!isEmpty)
-                    break;
-            }
-
-            if (isEmpty) return true;
-
-            for (var num = 1; num <= BoardSize; num++)
-            {
-                if (!IsSafe(row, col, num)) continue;
-
-                Board[row, col] = num;
-
-                if (Solve()) return true;
-
-                Board[row, col] = 0;
-            }
-
-            return false;
+            for (var i = 0; i < 9; i++)
+            for (var j = 0; j < 9; j++)
+                CalculatePossibilities(i, j);
         }
 
-        private bool IsSafe(int row, int col, int num) =>
-            CheckRow(row, num) && CheckColumn(col, num) && CheckSubGrid(row, col, num);
-
-        private bool CheckRow(int row, int num)
+        public int[,] PureGrid()
         {
-            for (var d = 0; d < Board.GetLength(0); d++)
-                if (Board[row, d] == num)
+            var gridVal = new int[9, 9];
+
+            for (var i = 0; i < 9; i++)
+            for (var j = 0; j < 9; j++)
+
+                gridVal[i, j] = Board[i, j].Value;
+
+            return gridVal;
+        }
+
+        public bool IsSolved()
+        {
+            for (var i = 0; i < 9; i++)
+            for (var j = 0; j < 9; j++)
+                if (Board[i, j].Value == 0)
                     return false;
 
             return true;
         }
 
-        private bool CheckColumn(int col, int num)
+        private void CalculatePossibilities(int x, int y)
         {
-            for (var r = 0; r < Board.GetLength(0); r++)
-                if (Board[r, col] == num)
-                    return false;
+            for (var i = 0; i < 9; i++)
+            {
+                if (Board[i, y].Value != 0)
+                    Board[x, y].Restricted[Board[i, y].Value] = true;
 
-            return true;
-        }
+                if (Board[x, i].Value != 0)
+                    Board[x, y].Restricted[Board[x, i].Value] = true;
+            }
 
-        private bool CheckSubGrid(int row, int col, int num)
-        {
-            var boxRowStart = row - row % 3;
-            var boxColStart = col - col % 3;
+            var boxRowStart = x - x % 3;
+            var boxColStart = y - y % 3;
 
             for (var r = boxRowStart; r < boxRowStart + 3; r++)
             for (var c = boxColStart; c < boxColStart + 3; c++)
-                if (Board[r, c] == num)
-                    return false;
+                if (Board[r, c].Value != 0)
+                    Board[x, y].Restricted[Board[r, c].Value] = true;
+        }
 
-            return true;
+        private int CalculateOrder(int x, int y) =>
+            Board[x, y].Value != 0 ? 0 : Board[x, y].Restricted.Count(t => t == false);
+
+        public Tuple<int, int> ChooseField()
+        {
+            var bestX = -1;
+            var bestY = -1;
+            var best = int.MaxValue;
+            for (var i = 0; i < 9; i++)
+            {
+                for (var j = 0; j < 9; j++)
+                {
+                    var order = CalculateOrder(i, j);
+                    if (order == 0) continue;
+                    if (order >= best) continue;
+
+                    bestX = i;
+                    bestY = j;
+                    best = CalculateOrder(i, j);
+                }
+            }
+
+            var tuple = new Tuple<int, int>(bestX, bestY);
+            return tuple;
         }
     }
 }

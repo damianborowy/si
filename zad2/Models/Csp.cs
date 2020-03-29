@@ -11,7 +11,26 @@ namespace zad2.Models
 
         private Csp(IEnumerable<string> fileAsStrings)
         {
-            Sudokus = fileAsStrings.Select(boardAsString => new Sudoku(boardAsString)).ToList();
+            Sudokus = fileAsStrings.Select(boardAsString =>
+            {
+                var board = new int[9, 9];
+                var unparsedBoard = boardAsString.Split(";")[2];
+
+                var counter = 0;
+                for (var i = 0; i < 9; i++)
+                for (var j = 0; j < 9; j++)
+                {
+                    board[i, j] = (int) char.GetNumericValue(unparsedBoard[counter]);
+                    if (board[i, j] == -1)
+                    {
+                        board[i, j] = 0;
+                    }
+
+                    counter++;
+                }
+
+                return new Sudoku(board);
+            }).ToList();
         }
 
         public static Csp FromFile()
@@ -21,5 +40,15 @@ namespace zad2.Models
 
             return new Csp(fileAsStrings);
         }
+
+        public static IEnumerable<string> GetSudokuNames() =>
+            File.ReadAllLines(Path.Combine(Environment.CurrentDirectory, "Sudoku.csv")).Skip(1)
+                .Select(
+                    file =>
+                    {
+                        var splitFile = file.Split(";");
+
+                        return splitFile[0] + " (difficulty: " + splitFile[1] + ")";
+                    });
     }
 }

@@ -13,22 +13,24 @@ namespace zad2.Controllers
     [Route("[controller]")]
     public class SudokuController : ControllerBase
     {
+        [HttpGet]
+        public IEnumerable<string> GetFiles()
+        {
+            return Csp.GetSudokuNames();
+        }
+
         [HttpGet("{index:int}")]
         public SudokuResult GetTestSudoku(int index)
         {
             var csp = Csp.FromFile();
-            var sudoku = csp.Sudokus[index];
+            var sudokuSolver = new SudokuSolver(csp.Sudokus[index]);
             var stopwatch = new Stopwatch();
 
             stopwatch.Start();
-            sudoku.Solve();
+            var result = sudokuSolver.SolveSudoku();
             stopwatch.Stop();
 
-            return new SudokuResult(
-                1,
-                stopwatch.ElapsedMilliseconds / 1000,
-                sudoku.Board.Cast<int>().Select(elem => elem)
-            );
+            return result;
         }
     }
 }

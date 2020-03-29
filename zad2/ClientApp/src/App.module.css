@@ -1,12 +1,25 @@
 ﻿.content {
     display: grid;
-    grid-template-columns: 150px 1fr 500px;
+    grid-template-columns: 300px 1fr 500px;
     grid-template-rows: 1fr;
 }
 
 .sidebar {
     margin: 20px;
-    font-size: 18px;
+    font-size: 17px;
+}
+
+.sidebar > *:first-child {
+    margin: 0;
+}
+
+.sidebar > * {
+    margin: 20px 0;
+}
+
+.select {
+    width: 100%;
+    font-size: 17px;
 }
 
 .grid {
