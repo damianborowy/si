@@ -47,54 +47,47 @@ namespace zad2.Models
                     {
                         var field = current.Current.Board[item1, item2];
 
-                        switch (ValueSelection)
+                        if (ValueSelection is RandomValSelection)
                         {
-                            case RandomValSelection _:
+                            var values = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
+                            var possibleValues = values.OrderBy(val => rng.Next());
+
+                            foreach (var value in possibleValues)
                             {
-                                var values = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
-                                var possibleValues = values.OrderBy(val => rng.Next());
+                                if (Algorithm is BackwardAlgorithm) Result.TotalNodesVisitedCount++;
+                                if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount++;
 
-                                foreach (var value in possibleValues)
-                                {
-                                    if (Algorithm is BackwardAlgorithm) Result.TotalNodesVisitedCount++;
-                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount++;
+                                if (field.Restricted[value]) continue;
 
-                                    if (field.Restricted[value]) continue;
+                                if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount--;
 
-                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount--;
+                                var newSudoku = new Sudoku(current.Current.PureGrid(), VariableSelection,
+                                    ValueSelection);
+                                newSudoku.Board[item1, item2].Value = value;
 
-                                    var newSudoku = new Sudoku(current.Current.PureGrid(), VariableSelection,
-                                        ValueSelection);
-                                    newSudoku.Board[item1, item2].Value = value;
-
-                                    newSudoku.CalculateAllPossibilities();
-                                    var newNode = new Node(new List<Node>(), current, newSudoku);
-                                    current.Children.Add(newNode);
-                                }
-
-                                break;
+                                newSudoku.CalculateAllPossibilities();
+                                var newNode = new Node(new List<Node>(), current, newSudoku);
+                                current.Children.Add(newNode);
                             }
-                            case OrderedValSelection _:
+                        }
+                        else if (ValueSelection is OrderedValSelection)
+                        {
+                            for (var i = 1; i < field.Restricted.Length; i++)
                             {
-                                for (var i = 1; i < field.Restricted.Length; i++)
-                                {
-                                    if (Algorithm is BackwardAlgorithm) Result.TotalNodesVisitedCount++;
-                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount++;
+                                if (Algorithm is BackwardAlgorithm) Result.TotalNodesVisitedCount++;
+                                if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount++;
 
-                                    if (field.Restricted[i]) continue;
+                                if (field.Restricted[i]) continue;
 
-                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount--;
+                                if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount--;
 
-                                    var newSudoku = new Sudoku(current.Current.PureGrid(), VariableSelection,
-                                        ValueSelection);
-                                    newSudoku.Board[item1, item2].Value = i;
+                                var newSudoku = new Sudoku(current.Current.PureGrid(), VariableSelection,
+                                    ValueSelection);
+                                newSudoku.Board[item1, item2].Value = i;
 
-                                    newSudoku.CalculateAllPossibilities();
-                                    var newNode = new Node(new List<Node>(), current, newSudoku);
-                                    current.Children.Add(newNode);
-                                }
-
-                                break;
+                                newSudoku.CalculateAllPossibilities();
+                                var newNode = new Node(new List<Node>(), current, newSudoku);
+                                current.Children.Add(newNode);
                             }
                         }
 
