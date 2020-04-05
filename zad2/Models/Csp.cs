@@ -66,7 +66,7 @@ namespace zad2.Models
             Settings.VariableSelection switch
             {
                 "mostConstrained" => new MostConstrainedSelection(),
-                "random" => new RandomVarSelection(),
+                "ordered" => new OrderedVarSelection(),
                 _ => throw new Exception()
             };
     }

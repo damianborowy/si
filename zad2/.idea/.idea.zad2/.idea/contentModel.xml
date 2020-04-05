@@ -13,8 +13,8 @@
         <e p="IVariableSelection.cs" t="Include" />
         <e p="MostConstrainedSelection.cs" t="Include" />
         <e p="OrderedValSelection.cs" t="Include" />
+        <e p="OrderedVarSelection.cs" t="Include" />
         <e p="RandomValSelection.cs" t="Include" />
-        <e p="RandomVarSelection.cs" t="Include" />
       </e>
       <e p="appsettings.Development.json" t="Include" />
       <e p="appsettings.json" t="Include" />

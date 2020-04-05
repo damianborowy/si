@@ -72,31 +72,5 @@ namespace zad2.Models
                 if (Board[r, c].Value != 0)
                     Board[x, y].Restricted[Board[r, c].Value] = true;
         }
-
-        private int CalculateOrder(int x, int y) =>
-            Board[x, y].Value != 0 ? 0 : Board[x, y].Restricted.Count(t => t == false);
-
-        public Tuple<int, int> ChooseField()
-        {
-            var bestX = -1;
-            var bestY = -1;
-            var best = int.MaxValue;
-            for (var i = 0; i < 9; i++)
-            {
-                for (var j = 0; j < 9; j++)
-                {
-                    var order = CalculateOrder(i, j);
-                    if (order == 0) continue;
-                    if (order >= best) continue;
-
-                    bestX = i;
-                    bestY = j;
-                    best = CalculateOrder(i, j);
-                }
-            }
-
-            var tuple = new Tuple<int, int>(bestX, bestY);
-            return tuple;
-        }
     }
 }

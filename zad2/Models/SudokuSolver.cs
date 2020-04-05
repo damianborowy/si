@@ -32,22 +32,8 @@ namespace zad2.Models
             var timer = new Stopwatch();
             timer.Start();
 
+            var rng = new Random();
             var head = new Node(new List<Node>(), null, FirstSudoku);
-
-            var chosenField = FirstSudoku.ChooseField();
-            var field = FirstSudoku.Board[chosenField.Item1, chosenField.Item2];
-            for (var i = 0; i < field.Restricted.Length; i++)
-            {
-                if (field.Restricted[i]) continue;
-
-                var newSudoku = new Sudoku(FirstSudoku.PureGrid(), VariableSelection, ValueSelection);
-                newSudoku.Board[chosenField.Item1, chosenField.Item2].Value = i;
-                newSudoku.CalculateAllPossibilities();
-                var newNode = new Node(new List<Node>(), head, newSudoku);
-                head.Children.Add(newNode);
-            }
-
-            head.HasAllChildren = true;
             var current = head;
             Result.TotalNodesVisitedCount++;
 
@@ -55,27 +41,61 @@ namespace zad2.Models
             {
                 if (!current.HasAllChildren)
                 {
-                    chosenField = current.Current.ChooseField();
+                    var (item1, item2) = VariableSelection.Evaluate(current.Current.Board);
 
-                    if (chosenField.Item1 != -1)
+                    if (item1 != -1)
                     {
-                        field = current.Current.Board[chosenField.Item1, chosenField.Item2];
+                        var field = current.Current.Board[item1, item2];
 
-                        for (var i = 1; i < field.Restricted.Length; i++)
+                        switch (ValueSelection)
                         {
-                            if (Algorithm is BackwardAlgorithm) Result.TotalNodesVisitedCount++;
-                            if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount++;
+                            case RandomValSelection _:
+                            {
+                                var values = new[] {1, 2, 3, 4, 5, 6, 7, 8, 9};
+                                var possibleValues = values.OrderBy(val => rng.Next());
 
-                            if (field.Restricted[i]) continue;
+                                foreach (var value in possibleValues)
+                                {
+                                    if (Algorithm is BackwardAlgorithm) Result.TotalNodesVisitedCount++;
+                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount++;
 
-                            if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount--;
+                                    if (field.Restricted[value]) continue;
 
-                            var newSudoku = new Sudoku(current.Current.PureGrid(), VariableSelection, ValueSelection);
-                            newSudoku.Board[chosenField.Item1, chosenField.Item2].Value = i;
+                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount--;
 
-                            newSudoku.CalculateAllPossibilities();
-                            var newNode = new Node(new List<Node>(), current, newSudoku);
-                            current.Children.Add(newNode);
+                                    var newSudoku = new Sudoku(current.Current.PureGrid(), VariableSelection,
+                                        ValueSelection);
+                                    newSudoku.Board[item1, item2].Value = value;
+
+                                    newSudoku.CalculateAllPossibilities();
+                                    var newNode = new Node(new List<Node>(), current, newSudoku);
+                                    current.Children.Add(newNode);
+                                }
+
+                                break;
+                            }
+                            case OrderedValSelection _:
+                            {
+                                for (var i = 1; i < field.Restricted.Length; i++)
+                                {
+                                    if (Algorithm is BackwardAlgorithm) Result.TotalNodesVisitedCount++;
+                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount++;
+
+                                    if (field.Restricted[i]) continue;
+
+                                    if (Algorithm is BackwardAlgorithm) Result.TotalRecurrencesCount--;
+
+                                    var newSudoku = new Sudoku(current.Current.PureGrid(), VariableSelection,
+                                        ValueSelection);
+                                    newSudoku.Board[item1, item2].Value = i;
+
+                                    newSudoku.CalculateAllPossibilities();
+                                    var newNode = new Node(new List<Node>(), current, newSudoku);
+                                    current.Children.Add(newNode);
+                                }
+
+                                break;
+                            }
                         }
 
                         current.HasAllChildren = true;
@@ -95,7 +115,11 @@ namespace zad2.Models
                     foreach (var t in Solutions.Where(t => CheckIfIsTheSameSolution(t, current.Current)))
                         shouldBeAdded = false;
 
-                    if (shouldBeAdded) Solutions.Add(current.Current);
+                    if (shouldBeAdded)
+                    {
+                        Solutions.Add(current.Current);
+                        Console.WriteLine("Added a solution no. " + Solutions.Count);
+                    }
 
                     Result.TotalRecurrencesCount++;
                     Result.TotalNodesVisitedCount++;
@@ -164,7 +188,7 @@ namespace zad2.Models
             Settings.VariableSelection switch
             {
                 "mostConstrained" => new MostConstrainedSelection(),
-                "random" => new RandomVarSelection(),
+                "ordered" => new OrderedVarSelection(),
                 _ => throw new Exception()
             };
     }

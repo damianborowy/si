@@ -94,8 +94,8 @@ export default class App extends Component {
                             <Option value="mostConstrained">
                                 Najbardziej ograniczone
                             </Option>
-                            <Option value="random">
-                                Losowe
+                            <Option value="ordered">
+                                W kolejności definicji
                             </Option>
                         </Select>
                     </div>
