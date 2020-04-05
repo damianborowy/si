@@ -19,16 +19,13 @@ namespace zad2.Controllers
             return Csp.GetSudokuNames();
         }
 
-        [HttpGet("{index:int}")]
-        public SudokuResult GetTestSudoku(int index)
+        [HttpPost("{index:int}")]
+        public SudokuResult PostSudoku(int index, [FromBody] SudokuSettings settings)
         {
-            var csp = Csp.FromFile();
-            var sudokuSolver = new SudokuSolver(csp.Sudokus[index]);
-            var stopwatch = new Stopwatch();
+            var csp = Csp.FromFile(settings);
+            var sudokuSolver = new SudokuSolver(csp.Sudokus[index], settings);
 
-            stopwatch.Start();
             var result = sudokuSolver.SolveSudoku();
-            stopwatch.Stop();
 
             return result;
         }

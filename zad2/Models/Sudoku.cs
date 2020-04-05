@@ -2,20 +2,25 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using zad2.Algorithms;
 
 namespace zad2.Models
 {
     public class Sudoku
     {
         public Field[,] Board { get; set; }
+        private IVariableSelection VariableSelection { get; set; }
+        private IValueSelection ValueSelection { get; set; }
 
-        public Sudoku(int[,] grid)
+        public Sudoku(int[,] board, IVariableSelection variableSelection, IValueSelection valueSelection)
         {
             Board = new Field[9, 9];
+            VariableSelection = variableSelection;
+            ValueSelection = valueSelection;
 
             for (var i = 0; i < 9; i++)
             for (var j = 0; j < 9; j++)
-                Board[i, j] = new Field {Value = grid[i, j]};
+                Board[i, j] = new Field {Value = board[i, j]};
 
             CalculateAllPossibilities();
         }
@@ -33,7 +38,6 @@ namespace zad2.Models
 
             for (var i = 0; i < 9; i++)
             for (var j = 0; j < 9; j++)
-
                 gridVal[i, j] = Board[i, j].Value;
 
             return gridVal;

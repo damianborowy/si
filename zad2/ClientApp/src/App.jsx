@@ -4,7 +4,15 @@ import 'antd/dist/antd.css';
 import {Button, InputNumber, Select} from "antd";
 
 export default class App extends Component {
-    state = {res: null, selectedFile: 0, files: null, loading: false};
+    state = {
+        res: null,
+        selectedFile: 0,
+        files: null,
+        loading: false,
+        algorithm: "forward",
+        variableSelection: "mostConstrained",
+        valueSelection: "ordered"
+    };
 
     async componentDidMount() {
         const files = await fetch("/sudoku/").then(res => res.json());
@@ -12,14 +20,25 @@ export default class App extends Component {
         this.setState({files});
     }
 
-    handleChange = (selectedFile) => {
-        this.setState({selectedFile})
-    };
+    handleChange = (selectedFile) => this.setState({selectedFile});
+    handleAlgorithmChange = (algorithm) => this.setState({algorithm});
+    handleVariableChange = (variableSelection) => this.setState({variableSelection});
+    handleValueChange = (valueSelection) => this.setState({valueSelection});
 
     onStartClick = async () => {
         this.setState({loading: true});
 
-        const res = await fetch(`/sudoku/${this.state.selectedFile}`).then(res => res.json());
+        const {algorithm, variableSelection, valueSelection} = this.state;
+
+        const res = await fetch(`/sudoku/${this.state.selectedFile}`, {
+            method: "POST",
+            body: JSON.stringify({algorithm, variableSelection, valueSelection}),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        }).then(res => res.json());
+
+        console.log({algorithm, variableSelection, valueSelection});
 
         this.setState({loading: false, res})
     };
@@ -59,25 +78,35 @@ export default class App extends Component {
                     </div>
                     <div>
                         <b>Metoda:</b><br/>
-                        <Select className={styles.select} defaultValue="recursive">
-                            <Option value="recursive">
+                        <Select className={styles.select} defaultValue="forward" onChange={this.handleAlgorithmChange}>
+                            <Option value="forward">
+                                Przeszukiwanie w przód
+                            </Option>
+                            <Option value="backward">
                                 Przeszukiwanie z nawrotami
                             </Option>
                         </Select>
                     </div>
                     <div>
                         <b>Heurystyka wyboru zmiennych:</b><br/>
-                        <Select className={styles.select} defaultValue="ordered">
-                            <Option value="ordered">
-                                W kolejności definicji
+                        <Select className={styles.select} defaultValue="mostConstrained"
+                                onChange={this.handleVariableChange}>
+                            <Option value="mostConstrained">
+                                Najbardziej ograniczone
+                            </Option>
+                            <Option value="random">
+                                Losowe
                             </Option>
                         </Select>
                     </div>
                     <div>
                         <b>Heurystyka wyboru wartości:</b><br/>
-                        <Select className={styles.select} defaultValue="ordered">
+                        <Select className={styles.select} defaultValue="ordered" onChange={this.handleValueChange}>
                             <Option value="ordered">
                                 W kolejności definicji
+                            </Option>
+                            <Option value="random">
+                                Losowe
                             </Option>
                         </Select><br/>
                     </div>

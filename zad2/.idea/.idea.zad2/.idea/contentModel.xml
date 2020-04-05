@@ -5,6 +5,17 @@
     <e p="C:\Users\Student242525\.Rider2019.3\system\resharper-host\local\Transient\ReSharperHost\v193\SolutionCaches\_zad2.-728703181.00" t="ExcludeRecursive" />
     <e p="C:\Users\Student242525\Documents\github\SI\zad2" t="IncludeRecursive">
       <e p=".gitignore" t="Include" />
+      <e p="Algorithms" t="Include">
+        <e p="BackwardAlgorithm.cs" t="Include" />
+        <e p="ForwardAlgorithm.cs" t="Include" />
+        <e p="IAlgorithm.cs" t="Include" />
+        <e p="IValueSelection.cs" t="Include" />
+        <e p="IVariableSelection.cs" t="Include" />
+        <e p="MostConstrainedSelection.cs" t="Include" />
+        <e p="OrderedValSelection.cs" t="Include" />
+        <e p="RandomValSelection.cs" t="Include" />
+        <e p="RandomVarSelection.cs" t="Include" />
+      </e>
       <e p="appsettings.Development.json" t="Include" />
       <e p="appsettings.json" t="Include" />
       <e p="bin" t="ExcludeRecursive" />
@@ -112,6 +123,7 @@
         <e p="Node.cs" t="Include" />
         <e p="Sudoku.cs" t="Include" />
         <e p="SudokuResult.cs" t="Include" />
+        <e p="SudokuSettings.cs" t="Include" />
         <e p="SudokuSolver.cs" t="Include" />
       </e>
       <e p="obj" t="ExcludeRecursive">
