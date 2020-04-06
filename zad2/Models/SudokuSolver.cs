@@ -108,11 +108,7 @@ namespace zad2.Models
                     foreach (var t in Solutions.Where(t => CheckIfIsTheSameSolution(t, current.Current)))
                         shouldBeAdded = false;
 
-                    if (shouldBeAdded)
-                    {
-                        Solutions.Add(current.Current);
-                        Console.WriteLine("Added a solution no. " + Solutions.Count);
-                    }
+                    if (shouldBeAdded) Solutions.Add(current.Current);
 
                     Result.TotalRecurrencesCount++;
                     Result.TotalNodesVisitedCount++;
