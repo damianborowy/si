@@ -3,8 +3,8 @@ import "./App.css";
 import {Button, Select} from "antd";
 import 'antd/dist/antd.css';
 
-const ROWS = 8;
-const COLUMNS = 8;
+const ROWS = 6;
+const COLUMNS = 7;
 
 export default class App extends React.Component {
     state = {
