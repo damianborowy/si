@@ -173,31 +173,40 @@ export default class App extends React.Component {
         const {Option} = Select;
 
         return (
-            <div>
-                <Select className="select" defaultValue="PvSI" onChange={this.onChange}>
-                    <Option value="PvSI">PvSI</Option>
-                    <Option value="SIvSI">SIvSI</Option>
-                </Select>
-                <div className="button">
-                    <Button onClick={this.initBoard}>New Game</Button>
+            <div style={{display: "flex", width: "100%"}}>
+                <div style={{width: "200px", margin: "20px"}}>
+                    <h4>Tryb gry:</h4>
+                    <Select className="select" defaultValue="PvSI" onChange={this.onChange}>
+                        <Option value="PvSI">PvSI</Option>
+                        <Option value="SIvSI">SIvSI</Option>
+                        <Option value="PvP">PvP</Option>
+                    </Select><br/>
+                    <Button onClick={this.initBoard} type="primary" block>New Game</Button>
                 </div>
+                <div style={{
+                    flex: 1,
+                    marginTop: "20px",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center"
+                }}>
+                    <table cellSpacing={0} cellPadding={0}>
+                        <thead>
+                        </thead>
+                        <tbody>
+                        {this.state.board.map((row, i) => (<Row key={i} row={row} play={this.play}/>))}
+                        </tbody>
+                    </table>
 
-                <table cellSpacing={0} cellPadding={0}>
-                    <thead>
-                    </thead>
-                    <tbody>
-                    {this.state.board.map((row, i) => (<Row key={i} row={row} play={this.play}/>))}
-                    </tbody>
-                </table>
+                    <p
+                        className="message"
+                        style={{color: this.state.currentPlayer === 1 ? "red" : "orange"}}
+                    >
+                        Player {this.state.currentPlayer === 1 ? "RED" : "YELLOW"} turn.
+                    </p>
 
-                <p
-                    className="message"
-                    style={{color: this.state.currentPlayer === 1 ? "red" : "orange"}}
-                >
-                    Player {this.state.currentPlayer === 1 ? "RED" : "YELLOW"} turn.
-                </p>
-
-                <p className="message">{this.state.message}</p>
+                    <p className="message">{this.state.message}</p>
+                </div>
             </div>
         );
     }
