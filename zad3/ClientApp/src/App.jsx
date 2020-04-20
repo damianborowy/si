@@ -1,7 +1,10 @@
 import React from "react";
 import "./App.css";
-import {Button} from "antd";
+import {Button, Select} from "antd";
 import 'antd/dist/antd.css';
+
+const ROWS = 8;
+const COLUMNS = 8;
 
 export default class App extends React.Component {
     state = {
@@ -10,7 +13,8 @@ export default class App extends React.Component {
         currentPlayer: null,
         board: [],
         gameOver: false,
-        message: ''
+        message: '',
+        gameMode: "PvSI"
     };
 
     componentWillMount() {
@@ -20,26 +24,36 @@ export default class App extends React.Component {
     async componentDidUpdate(prevProps, prevState, snapshot) {
         console.log({board: this.state.board});
 
-        if (this.state.currentPlayer === 2) {
-            const aiSelectedColumn = await fetch("ConnectFour", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({board: this.state.board})
-            }).then(res => res.text());
+        if (this.state.gameOver) return;
 
-            this.play(parseInt(aiSelectedColumn));
+        if (this.state.gameMode === "PvSI") {
+            if (this.state.currentPlayer === 2) {
+                await this._getColumnFromSi();
+            }
+        } else if (this.state.gameMode === "SIvSI") {
+            await this._getColumnFromSi();
         }
+    }
+
+    async _getColumnFromSi() {
+        const aiSelectedColumn = await fetch("ConnectFour", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({board: this.state.board})
+        }).then(res => res.text());
+
+        this.play(parseInt(aiSelectedColumn));
     }
 
     initBoard = () => {
         let board = [];
 
-        for (let r = 0; r < 6; r++) {
+        for (let r = 0; r < ROWS; r++) {
             let row = [];
 
-            for (let c = 0; c < 7; c++) row.push(0);
+            for (let c = 0; c < COLUMNS; c++) row.push(0);
 
             board.push(row);
         }
@@ -57,7 +71,7 @@ export default class App extends React.Component {
     play = (col) => {
         if (!this.state.gameOver) {
             let board = this.state.board;
-            for (let row = 5; row >= 0; row--) {
+            for (let row = ROWS - 1; row >= 0; row--) {
                 if (!board[row][col]) {
                     board[row][col] = this.state.currentPlayer;
                     break;
@@ -80,8 +94,8 @@ export default class App extends React.Component {
     };
 
     checkVertical(board) {
-        for (let r = 3; r < 6; r++) {
-            for (let c = 0; c < 7; c++) {
+        for (let r = 3; r < ROWS; r++) {
+            for (let c = 0; c < COLUMNS; c++) {
                 if (board[r][c]) {
                     if (board[r][c] === board[r - 1][c] &&
                         board[r][c] === board[r - 2][c] &&
@@ -94,8 +108,8 @@ export default class App extends React.Component {
     }
 
     checkHorizontal(board) {
-        for (let r = 0; r < 6; r++) {
-            for (let c = 0; c < 4; c++) {
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLUMNS - 3; c++) {
                 if (board[r][c]) {
                     if (board[r][c] === board[r][c + 1] &&
                         board[r][c] === board[r][c + 2] &&
@@ -108,8 +122,8 @@ export default class App extends React.Component {
     }
 
     checkDiagonalRight(board) {
-        for (let r = 3; r < 6; r++) {
-            for (let c = 0; c < 4; c++) {
+        for (let r = 3; r < ROWS; r++) {
+            for (let c = 0; c < COLUMNS - 3; c++) {
                 if (board[r][c]) {
                     if (board[r][c] === board[r - 1][c + 1] &&
                         board[r][c] === board[r - 2][c + 2] &&
@@ -122,8 +136,8 @@ export default class App extends React.Component {
     }
 
     checkDiagonalLeft(board) {
-        for (let r = 3; r < 6; r++) {
-            for (let c = 3; c < 7; c++) {
+        for (let r = 3; r < ROWS; r++) {
+            for (let c = 3; c < COLUMNS; c++) {
                 if (board[r][c]) {
                     if (board[r][c] === board[r - 1][c - 1] &&
                         board[r][c] === board[r - 2][c - 2] &&
@@ -136,8 +150,8 @@ export default class App extends React.Component {
     }
 
     checkDraw(board) {
-        for (let r = 0; r < 6; r++) {
-            for (let c = 0; c < 7; c++) {
+        for (let r = 0; r < ROWS; r++) {
+            for (let c = 0; c < COLUMNS; c++) {
                 if (board[r][c] === 0) {
                     return null;
                 }
@@ -151,9 +165,19 @@ export default class App extends React.Component {
         return this.checkVertical(board) || this.checkDiagonalRight(board) || this.checkDiagonalLeft(board) || this.checkHorizontal(board) || this.checkDraw(board);
     }
 
+    onChange = (value) => {
+        this.setState({gameMode: value})
+    };
+
     render() {
+        const {Option} = Select;
+
         return (
             <div>
+                <Select className="select" defaultValue="PvSI" onChange={this.onChange}>
+                    <Option value="PvSI">PvSI</Option>
+                    <Option value="SIvSI">SIvSI</Option>
+                </Select>
                 <div className="button">
                     <Button onClick={this.initBoard}>New Game</Button>
                 </div>
@@ -165,6 +189,13 @@ export default class App extends React.Component {
                     {this.state.board.map((row, i) => (<Row key={i} row={row} play={this.play}/>))}
                     </tbody>
                 </table>
+
+                <p
+                    className="message"
+                    style={{color: this.state.currentPlayer === 1 ? "red" : "orange"}}
+                >
+                    Player {this.state.currentPlayer === 1 ? "RED" : "YELLOW"} turn.
+                </p>
 
                 <p className="message">{this.state.message}</p>
             </div>

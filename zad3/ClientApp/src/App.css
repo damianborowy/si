@@ -13,6 +13,11 @@ table {
     border-spacing: 0 0;
 }
 
+#root {
+    display: flex;
+    justify-content: center;
+}
+
 .button {
     height: 30px;
     width: 100px;
@@ -56,6 +61,12 @@ table {
 
 .yellow-sm {
     background-color: yellow;
+}
+
+div .select {
+    display: flex;
+    margin: 30px auto 0;
+    width: 150px;
 }
 
 .message {

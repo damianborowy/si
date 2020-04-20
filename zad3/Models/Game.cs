@@ -5,6 +5,6 @@ namespace zad3.Models
 {
     public class Game
     {
-        public List<List<int>> Board { get; set; }
+        public int[][] Board { get; set; }
     }
 }

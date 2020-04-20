@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using zad3.Algorithms;
 using zad3.Models;
 
 namespace zad3.Controllers
@@ -16,11 +17,12 @@ namespace zad3.Controllers
         [HttpPost]
         public int SelectColumn([FromBody] Game game)
         {
-            var rng = new Random();
+            var board = Board.FromJaggedArray(game.Board);
+            var selection = new MinMaxSelection(board, 6);
 
-            Thread.Sleep(500);
+            var result = selection.Evaluate();
 
-            return rng.Next(7);
+            return result;
         }
     }
 }
