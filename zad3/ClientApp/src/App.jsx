@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import {Button, Select} from "antd";
+import {Button, InputNumber, Select} from "antd";
 import 'antd/dist/antd.css';
 
 const ROWS = 6;
@@ -14,7 +14,11 @@ export default class App extends React.Component {
         board: [],
         gameOver: false,
         message: '',
-        gameMode: "PvSI"
+        gameMode: "PvSI",
+        startingTime: null,
+        endingTime: null,
+        depth: 6,
+        algorithm: "minmax"
     };
 
     componentWillMount() {
@@ -36,12 +40,16 @@ export default class App extends React.Component {
     }
 
     async _getColumnFromSi() {
+        const algorithm = this.state.algorithm,
+            board = this.state.board,
+            depth = this.state.depth;
+
         const aiSelectedColumn = await fetch("ConnectFour", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({board: this.state.board})
+            body: JSON.stringify({board, algorithm, depth})
         }).then(res => res.text());
 
         this.play(parseInt(aiSelectedColumn));
@@ -62,7 +70,9 @@ export default class App extends React.Component {
             board,
             currentPlayer: this.state.player1,
             gameOver: false,
-            message: ''
+            message: '',
+            startingTime: performance.now(),
+            endingTime: null
         });
     };
 
@@ -71,6 +81,7 @@ export default class App extends React.Component {
     play = (col) => {
         if (!this.state.gameOver) {
             let board = this.state.board;
+
             for (let row = ROWS - 1; row >= 0; row--) {
                 if (!board[row][col]) {
                     board[row][col] = this.state.currentPlayer;
@@ -81,82 +92,71 @@ export default class App extends React.Component {
             let result = this.checkAll(board);
 
             if (result === this.state.player1)
-                this.setState({board, gameOver: true, message: 'Player 1 (red) wins!'});
+                this.setState({board, gameOver: true, message: 'Player 1 (red) wins!', endingTime: performance.now()});
             else if (result === this.state.player2)
-                this.setState({board, gameOver: true, message: 'Player 2 (yellow) wins!'});
+                this.setState({
+                    board,
+                    gameOver: true,
+                    message: 'Player 2 (yellow) wins!',
+                    endingTime: performance.now()
+                });
             else if (result === 'draw')
-                this.setState({board, gameOver: true, message: 'Draw game.'});
+                this.setState({board, gameOver: true, message: 'Draw game.', endingTime: performance.now()});
             else
                 this.setState({board, currentPlayer: this.togglePlayer()});
-        } else {
-            this.setState({message: 'Game over. Please start a new game.'});
-        }
+        } else this.setState({message: 'Game over. Please start a new game.'});
     };
 
+    _calculateGameDuration() {
+        const duration = this.state.endingTime - this.state.startingTime;
+        return Math.round(duration);
+    }
+
     checkVertical(board) {
-        for (let r = 3; r < ROWS; r++) {
-            for (let c = 0; c < COLUMNS; c++) {
-                if (board[r][c]) {
+        for (let r = 3; r < ROWS; r++)
+            for (let c = 0; c < COLUMNS; c++)
+                if (board[r][c])
                     if (board[r][c] === board[r - 1][c] &&
                         board[r][c] === board[r - 2][c] &&
-                        board[r][c] === board[r - 3][c]) {
+                        board[r][c] === board[r - 3][c])
                         return board[r][c];
-                    }
-                }
-            }
-        }
     }
 
     checkHorizontal(board) {
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLUMNS - 3; c++) {
-                if (board[r][c]) {
+        for (let r = 0; r < ROWS; r++)
+            for (let c = 0; c < COLUMNS - 3; c++)
+                if (board[r][c])
                     if (board[r][c] === board[r][c + 1] &&
                         board[r][c] === board[r][c + 2] &&
-                        board[r][c] === board[r][c + 3]) {
+                        board[r][c] === board[r][c + 3])
                         return board[r][c];
-                    }
-                }
-            }
-        }
     }
 
     checkDiagonalRight(board) {
-        for (let r = 3; r < ROWS; r++) {
-            for (let c = 0; c < COLUMNS - 3; c++) {
-                if (board[r][c]) {
+        for (let r = 3; r < ROWS; r++)
+            for (let c = 0; c < COLUMNS - 3; c++)
+                if (board[r][c])
                     if (board[r][c] === board[r - 1][c + 1] &&
                         board[r][c] === board[r - 2][c + 2] &&
-                        board[r][c] === board[r - 3][c + 3]) {
+                        board[r][c] === board[r - 3][c + 3])
                         return board[r][c];
-                    }
-                }
-            }
-        }
     }
 
     checkDiagonalLeft(board) {
-        for (let r = 3; r < ROWS; r++) {
-            for (let c = 3; c < COLUMNS; c++) {
-                if (board[r][c]) {
+        for (let r = 3; r < ROWS; r++)
+            for (let c = 3; c < COLUMNS; c++)
+                if (board[r][c])
                     if (board[r][c] === board[r - 1][c - 1] &&
                         board[r][c] === board[r - 2][c - 2] &&
-                        board[r][c] === board[r - 3][c - 3]) {
+                        board[r][c] === board[r - 3][c - 3])
                         return board[r][c];
-                    }
-                }
-            }
-        }
     }
 
     checkDraw(board) {
-        for (let r = 0; r < ROWS; r++) {
-            for (let c = 0; c < COLUMNS; c++) {
-                if (board[r][c] === 0) {
+        for (let r = 0; r < ROWS; r++)
+            for (let c = 0; c < COLUMNS; c++)
+                if (board[r][c] === 0)
                     return null;
-                }
-            }
-        }
 
         return 'draw';
     }
@@ -167,6 +167,14 @@ export default class App extends React.Component {
 
     onChange = (value) => {
         this.setState({gameMode: value})
+    };
+
+    onAlgorithmChange = (value) => {
+        this.setState({algorithm: value});
+    };
+
+    onDepthChange = (value) => {
+        this.setState({depth: value});
     };
 
     render() {
@@ -181,6 +189,13 @@ export default class App extends React.Component {
                         <Option value="SIvSI">SIvSI</Option>
                         <Option value="PvP">PvP</Option>
                     </Select><br/>
+                    <h4>Algorytm:</h4>
+                    <Select className="select" defaultValue="minmax" onChange={this.onAlgorithmChange}>
+                        <Option value="minmax">MinMax</Option>
+                        <Option value="alpha-beta">Alpha-Beta</Option>
+                    </Select><br/>
+                    <h4>Głębokość:</h4>
+                    <InputNumber defaultValue={6} min={1} max={10} onChange={this.onDepthChange}/><br/><br/>
                     <Button onClick={this.initBoard} type="primary" block>New Game</Button>
                 </div>
                 <div style={{
@@ -206,6 +221,11 @@ export default class App extends React.Component {
                     </p>
 
                     <p className="message">{this.state.message}</p>
+                </div>
+                <div style={{width: 200, margin: 20}}>
+                    {this.state.endingTime && <>
+                        <h4>Czas trwania gry: {this._calculateGameDuration()}ms</h4>
+                    </>}
                 </div>
             </div>
         );

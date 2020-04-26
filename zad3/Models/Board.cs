@@ -124,18 +124,5 @@ namespace zad3.Models
             _board[row, column] = 0;
             _changed = true;
         }
-
-        public void PrintBoard()
-        {
-            for (var i = 0; i < Rows; i++)
-            {
-                for (var j = 0; j < Columns; j++)
-                {
-                    Console.Write(_board[i, j] != 0 ? _board[i, j].ToString() : " ");
-                }
-
-                Console.Write(Environment.NewLine + Environment.NewLine);
-            }
-        }
     }
 }

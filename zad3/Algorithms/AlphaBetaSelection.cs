@@ -5,18 +5,18 @@ using zad3.Models;
 
 namespace zad3.Algorithms
 {
-    public class MinMaxSelection : IColumnSelection
+    public class AlphaBetaSelection : IColumnSelection
     {
         private readonly Board _board;
         private readonly int _depth;
 
-        public MinMaxSelection(Board board, int depth)
+        public AlphaBetaSelection(Board board, int depth)
         {
             _board = board;
             _depth = depth;
         }
 
-        private static int MinMax(int depth, Board board, bool maximizingPlayer)
+        private static int AlphaBeta(int depth, Board board, int alpha, int beta, bool maximizingPlayer)
         {
             if (depth <= 0) return 0;
 
@@ -30,7 +30,13 @@ namespace zad3.Algorithms
             {
                 if (!board.DropCoin(maximizingPlayer ? 2 : 1, i)) continue;
 
-                var value = MinMax(depth - 1, board, !maximizingPlayer);
+                var value = AlphaBeta(depth - 1, board, alpha, beta, !maximizingPlayer);
+
+                if (maximizingPlayer) alpha = Math.Max(alpha, value);
+                else beta = Math.Min(beta, value);
+
+                if (alpha >= beta) break;
+
                 bestValue = maximizingPlayer ? Math.Max(bestValue, value) : Math.Min(bestValue, value);
                 board.RemoveTopCoin(i);
             }
@@ -47,7 +53,7 @@ namespace zad3.Algorithms
             {
                 if (!_board.DropCoin(2, i)) continue;
 
-                moves.Add(Tuple.Create(i, MinMax(_depth, _board, false)));
+                moves.Add(Tuple.Create(i, AlphaBeta(_depth, _board, int.MinValue, int.MaxValue, false)));
                 _board.RemoveTopCoin(i);
             }
 
