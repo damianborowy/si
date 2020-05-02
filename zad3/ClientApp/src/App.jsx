@@ -26,8 +26,6 @@ export default class App extends React.Component {
     }
 
     async componentDidUpdate(prevProps, prevState, snapshot) {
-        console.log({board: this.state.board});
-
         if (this.state.gameOver) return;
 
         if (this.state.gameMode === "PvSI") {
@@ -42,7 +40,8 @@ export default class App extends React.Component {
     async _getColumnFromSi() {
         const algorithm = this.state.algorithm,
             board = this.state.board,
-            depth = this.state.depth;
+            depth = this.state.depth,
+            currentPlayer = this.state.currentPlayer;
 
         const aiSelectedColumn = await fetch("ConnectFour", {
             method: "POST",
@@ -52,7 +51,7 @@ export default class App extends React.Component {
             body: JSON.stringify({board, algorithm, depth})
         }).then(res => res.text());
 
-        this.play(parseInt(aiSelectedColumn));
+        this.play(parseInt(aiSelectedColumn), currentPlayer);
     }
 
     initBoard = () => {
@@ -78,13 +77,13 @@ export default class App extends React.Component {
 
     togglePlayer = () => this.state.currentPlayer === this.state.player1 ? this.state.player2 : this.state.player1;
 
-    play = (col) => {
+    play = (col, player) => {
         if (!this.state.gameOver) {
             let board = this.state.board;
 
             for (let row = ROWS - 1; row >= 0; row--) {
                 if (!board[row][col]) {
-                    board[row][col] = this.state.currentPlayer;
+                    board[row][col] = player;
                     break;
                 }
             }
@@ -195,7 +194,13 @@ export default class App extends React.Component {
                         <Option value="alpha-beta">Alpha-Beta</Option>
                     </Select><br/>
                     <h4>Głębokość:</h4>
-                    <InputNumber defaultValue={6} min={1} max={10} onChange={this.onDepthChange}/><br/><br/>
+                    <InputNumber
+                        defaultValue={6}
+                        min={1}
+                        max={10}
+                        onChange={this.onDepthChange}
+                        style={{width: "100%"}}
+                    /><br/><br/>
                     <Button onClick={this.initBoard} type="primary" block>New Game</Button>
                 </div>
                 <div style={{
@@ -249,7 +254,7 @@ const Cell = ({value, columnIndex, play}) => {
     return (
         <td>
             <div className="cell" onClick={() => {
-                play(columnIndex)
+                play(columnIndex, 1)
             }}>
                 <div className={color}/>
             </div>
