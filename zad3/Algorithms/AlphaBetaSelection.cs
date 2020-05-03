@@ -35,10 +35,10 @@ namespace zad3.Algorithms
                 if (maximizingPlayer) alpha = Math.Max(alpha, value);
                 else beta = Math.Min(beta, value);
 
-                if (alpha >= beta) break;
-
                 bestValue = maximizingPlayer ? Math.Max(bestValue, value) : Math.Min(bestValue, value);
                 board.RemoveTopCoin(i);
+
+                if (alpha >= beta) break;
             }
 
             return bestValue;
