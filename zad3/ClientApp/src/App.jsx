@@ -18,7 +18,8 @@ export default class App extends React.Component {
         startingTime: null,
         endingTime: null,
         depth: 6,
-        algorithm: "minmax"
+        algorithm: "minmax",
+        heuristic: "simple"
     };
 
     componentWillMount() {
@@ -41,6 +42,7 @@ export default class App extends React.Component {
         const algorithm = this.state.algorithm,
             board = this.state.board,
             depth = this.state.depth,
+            heuristic = this.state.heuristic,
             currentPlayer = this.state.currentPlayer;
 
         const aiSelectedColumn = await fetch("ConnectFour", {
@@ -48,7 +50,7 @@ export default class App extends React.Component {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({board, algorithm, depth})
+            body: JSON.stringify({board, algorithm, depth, heuristic, currentPlayer})
         }).then(res => res.text());
 
         this.play(parseInt(aiSelectedColumn), currentPlayer);
@@ -172,6 +174,10 @@ export default class App extends React.Component {
         this.setState({algorithm: value});
     };
 
+    onHeuristicChange = (value) => {
+        this.setState({heuristic: value})
+    };
+
     onDepthChange = (value) => {
         this.setState({depth: value});
     };
@@ -192,6 +198,11 @@ export default class App extends React.Component {
                     <Select className="select" defaultValue="minmax" onChange={this.onAlgorithmChange}>
                         <Option value="minmax">MinMax</Option>
                         <Option value="alpha-beta">Alpha-Beta</Option>
+                    </Select><br/>
+                    <h4>Heurystyka:</h4>
+                    <Select className="select" defaultValue="simple" onChange={this.onHeuristicChange}>
+                        <Option value="simple">Prosta</Option>
+                        <Option value="advanced">Zaawansowana</Option>
                     </Select><br/>
                     <h4>Głębokość:</h4>
                     <InputNumber

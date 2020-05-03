@@ -6,8 +6,9 @@ namespace zad3.Models
 {
     public class Board
     {
+        public int[,] Fields { get; }
+
         private int Rows { get; }
-        private readonly int[,] _board;
         private int? _winner;
         private bool _changed;
 
@@ -25,7 +26,7 @@ namespace zad3.Models
                 {
                     for (var j = 0; j < Columns; j++)
                     {
-                        if (_board[i, j] == 0) continue;
+                        if (Fields[i, j] == 0) continue;
 
                         var horizontal = i + 3 < Rows;
                         var vertical = j + 3 < Columns;
@@ -37,17 +38,17 @@ namespace zad3.Models
 
                         for (var k = 1; k < 4; k++)
                         {
-                            horizontal = horizontal && _board[i, j] == _board[i + k, j];
-                            vertical = vertical && _board[i, j] == _board[i, j + k];
-                            forwardDiagonal = forwardDiagonal && _board[i, j] == _board[i + k, j + k];
-                            backwardDiagonal = backwardDiagonal && _board[i, j] == _board[i - k, j + k];
+                            horizontal = horizontal && Fields[i, j] == Fields[i + k, j];
+                            vertical = vertical && Fields[i, j] == Fields[i, j + k];
+                            forwardDiagonal = forwardDiagonal && Fields[i, j] == Fields[i + k, j + k];
+                            backwardDiagonal = backwardDiagonal && Fields[i, j] == Fields[i - k, j + k];
 
                             if (!horizontal && !vertical && !forwardDiagonal && !backwardDiagonal) break;
                         }
 
                         if (!horizontal && !vertical && !forwardDiagonal && !backwardDiagonal) continue;
 
-                        _winner = _board[i, j];
+                        _winner = Fields[i, j];
                         return _winner;
                     }
                 }
@@ -62,18 +63,18 @@ namespace zad3.Models
             get
             {
                 for (var i = 0; i < Rows; i++)
-                    if (_board[i, 0] == 0)
+                    if (Fields[i, 0] == 0)
                         return false;
 
                 return true;
             }
         }
 
-        private Board(int[,] board)
+        private Board(int[,] fields)
         {
-            _board = board;
-            Rows = board.GetLength(0);
-            Columns = board.GetLength(1);
+            Fields = fields;
+            Rows = fields.GetLength(0);
+            Columns = fields.GetLength(1);
         }
 
         public static Board FromJaggedArray(int[][] board)
@@ -105,11 +106,11 @@ namespace zad3.Models
         public bool DropCoin(int playerId, int column)
         {
             var row = 0;
-            while (row < Rows && _board[row, column] == 0) row++;
+            while (row < Rows && Fields[row, column] == 0) row++;
 
             if (row == 0) return false;
 
-            _board[row - 1, column] = playerId;
+            Fields[row - 1, column] = playerId;
             _changed = true;
             return true;
         }
@@ -117,11 +118,11 @@ namespace zad3.Models
         public void RemoveTopCoin(int column)
         {
             var row = 0;
-            while (row < Rows && _board[row, column] == 0) row++;
+            while (row < Rows && Fields[row, column] == 0) row++;
 
             if (row == Rows) return;
 
-            _board[row, column] = 0;
+            Fields[row, column] = 0;
             _changed = true;
         }
     }

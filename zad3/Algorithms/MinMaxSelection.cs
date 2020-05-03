@@ -9,21 +9,21 @@ namespace zad3.Algorithms
     {
         private readonly Board _board;
         private readonly int _depth;
+        private readonly IValueHeuristic _valueHeuristic;
+        private readonly int _player;
 
-        public MinMaxSelection(Board board, int depth)
+        public MinMaxSelection(Board board, int depth, IValueHeuristic valueHeuristic, int player)
         {
             _board = board;
             _depth = depth;
+            _valueHeuristic = valueHeuristic;
+            _player = player;
         }
 
-        private static int MinMax(int depth, Board board, bool maximizingPlayer)
+        private int MinMax(int depth, Board board, bool maximizingPlayer)
         {
-            if (depth <= 0) return 0;
-
-            var winner = board.Winner;
-            if (winner == 2) return depth;
-            if (winner == 1) return -depth;
-            if (board.IsFull) return 0;
+            if (depth <= 0 || _valueHeuristic.IsBoardTerminal(board))
+                return _valueHeuristic.GetHeuristicValue(board, depth, _player);
 
             var bestValue = maximizingPlayer ? -1 : 1;
             for (var i = 0; i < board.Columns; i++)
