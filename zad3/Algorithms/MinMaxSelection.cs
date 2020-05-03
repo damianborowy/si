@@ -47,7 +47,7 @@ namespace zad3.Algorithms
             {
                 if (!_board.DropCoin(2, i)) continue;
 
-                moves.Add(Tuple.Create(i, MinMax(_depth, _board, false)));
+                moves.Add(Tuple.Create(i, MinMax(_depth, _board, _player == 1)));
                 _board.RemoveTopCoin(i);
             }
 
