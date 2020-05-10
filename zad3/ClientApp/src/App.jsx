@@ -19,7 +19,9 @@ export default class App extends React.Component {
         endingTime: null,
         depth: 6,
         algorithm: "minmax",
-        heuristic: "simple"
+        heuristic: "simple",
+        player1steps: 0,
+        player2steps: 0
     };
 
     componentWillMount() {
@@ -73,7 +75,9 @@ export default class App extends React.Component {
             gameOver: false,
             message: '',
             startingTime: performance.now(),
-            endingTime: null
+            endingTime: null,
+            player1steps: 0,
+            player2steps: 0
         });
     };
 
@@ -81,7 +85,9 @@ export default class App extends React.Component {
 
     play = (col, player) => {
         if (!this.state.gameOver) {
-            let board = this.state.board;
+            let board = this.state.board,
+                player1steps = this.state.player1steps,
+                player2steps = this.state.player2steps;
 
             for (let row = ROWS - 1; row >= 0; row--) {
                 if (!board[row][col]) {
@@ -90,21 +96,41 @@ export default class App extends React.Component {
                 }
             }
 
+            if (player === 1) player1steps++;
+            if (player === 2) player2steps++;
+
             let result = this.checkAll(board);
 
             if (result === this.state.player1)
-                this.setState({board, gameOver: true, message: 'Player 1 (red) wins!', endingTime: performance.now()});
+                this.setState({
+                    board,
+                    gameOver: true,
+                    message: 'Player 1 (red) wins!',
+                    endingTime: performance.now(),
+                    player1steps,
+                    player2steps
+                });
             else if (result === this.state.player2)
                 this.setState({
                     board,
                     gameOver: true,
                     message: 'Player 2 (yellow) wins!',
-                    endingTime: performance.now()
+                    endingTime: performance.now(),
+                    player1steps,
+                    player2steps
                 });
             else if (result === 'draw')
-                this.setState({board, gameOver: true, message: 'Draw game.', endingTime: performance.now()});
+                this.setState({
+                    board, gameOver: true, message: 'Draw game.', endingTime: performance.now(),
+                    player1steps,
+                    player2steps
+                });
             else
-                this.setState({board, currentPlayer: this.togglePlayer()});
+                this.setState({
+                    board, currentPlayer: this.togglePlayer(),
+                    player1steps,
+                    player2steps
+                });
         } else this.setState({message: 'Game over. Please start a new game.'});
     };
 
@@ -241,6 +267,8 @@ export default class App extends React.Component {
                 <div style={{width: 200, margin: 20}}>
                     {this.state.endingTime && <>
                         <h4>Czas trwania gry: {this._calculateGameDuration()}ms</h4>
+                        <h4>Ilość kroków do
+                            wygrania: {this.state.currentPlayer === 1 ? this.state.player1steps : this.state.player2steps}</h4>
                     </>}
                 </div>
             </div>
