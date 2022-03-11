@@ -19,9 +19,12 @@ namespace zad1.Models
 
         public double CalculateDistance(Town otherTown)
         {
-            if (EdgeWeightType.Equals("EUC_2D")) return CalculateEuc2D(otherTown);
-            if (EdgeWeightType.Equals("GEO")) return CalculateGeo(otherTown);
-            throw new Exception("Invalid EdgeWeightType");
+            return EdgeWeightType switch
+            {
+                "EUC_2D" => CalculateEuc2D(otherTown),
+                "GEO" => CalculateGeo(otherTown),
+                _ => throw new Exception("Invalid EdgeWeightType")
+            };
         }
 
         private double CalculateEuc2D(Town otherTown)

@@ -19,8 +19,6 @@ namespace zad1.Models
         private string EdgeWeightType { get; }
         private string DisplayDataType { get; }
 
-        private readonly Random _rng = new Random();
-
         private const int IterationsCount = 10;
         private const double GreedyFraction = 0.15;
 
@@ -125,40 +123,33 @@ namespace zad1.Models
         private GeneticPopulation Cross(Population selectedPopulation, AlgorithmSettings settings)
         {
             var crossingAlgorithm = ParseCrossingAlgorithm(settings);
-            double randomDouble;
-            int randomInt;
+            var rng = new Random();
+            var randomDoubles = Enumerable.Repeat(0, selectedPopulation.Individuals.Count)
+                .Select(_ => rng.NextDouble()).ToArray();
+            var randomInts = Enumerable.Repeat(0, selectedPopulation.Individuals.Count)
+                .Select(_ => rng.Next(selectedPopulation.Individuals.Count)).ToArray();
 
             return new GeneticPopulation
             {
-                Individuals = selectedPopulation.Individuals.AsParallel().Select(individual =>
-                {
-                    lock (_rng)
-                    {
-                        randomDouble = _rng.NextDouble();
-                        randomInt = _rng.Next(selectedPopulation.Individuals.Count);
-                    }
-
-                    return randomDouble > settings.Px
+                Individuals = selectedPopulation.Individuals.AsParallel().Select((individual, index) =>
+                    randomDoubles[index] > settings.Px
                         ? individual
-                        : crossingAlgorithm.Evaluate(individual, selectedPopulation.Individuals[randomInt]);
-                }).ToList()
+                        : crossingAlgorithm.Evaluate(individual, selectedPopulation.Individuals[randomInts[index]])
+                ).ToList()
             };
         }
 
         private GeneticPopulation Mutate(Population crossedPopulation, AlgorithmSettings settings)
         {
             var mutationAlgorithm = ParseMutationAlgorithm(settings);
-            double randomDouble;
+            var rng = new Random();
+            var randomDoubles = Enumerable.Repeat(0, crossedPopulation.Individuals.Count)
+                .Select(_ => rng.NextDouble()).ToArray();
 
             return new GeneticPopulation
             {
-                Individuals = crossedPopulation.Individuals.AsParallel().Select(individual =>
-                    {
-                        lock (_rng)
-                            randomDouble = _rng.NextDouble();
-
-                        return randomDouble < settings.Pm ? mutationAlgorithm.Evaluate(individual) : individual;
-                    }
+                Individuals = crossedPopulation.Individuals.AsParallel().Select((individual, index) =>
+                    randomDoubles[index] < settings.Pm ? mutationAlgorithm.Evaluate(individual) : individual
                 ).ToList()
             };
         }
